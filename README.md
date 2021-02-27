@@ -6,6 +6,8 @@
  1. Hidden Password
  2. Help page (70%)
  3. parsing files from arguments
+ 4. Method for appending data in the source file.
+ 5. Method of extracting the encrpyted message file.
  
 ## Output
 ![help.JPG](./src/help.JPG)
