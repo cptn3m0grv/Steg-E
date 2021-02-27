@@ -1,4 +1,4 @@
-# import colorama
+# import colorama 
 # from colorama import Fore, Back, Style
 
 # colorama.init(autoreset=True)
@@ -33,14 +33,18 @@ import argparse
 import getpass
 import os
 
-parser = argparse.ArgumentParser(description='Steganography')
+# description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
 
+parser = argparse.ArgumentParser(description="description")
+
+parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
 parser.add_argument('--src', help='Enter the location of source file (image, pdf, network packets)')
 parser.add_argument('--msg', help='Enter the location of message to hide.')
 parser.add_argument('--tgt', help='Enter the path to save output file.')
 
 args = parser.parse_args()
 
+print(args.choice)
 
 os.system("COPY {} > {}".format(args.src, args.tgt))
 

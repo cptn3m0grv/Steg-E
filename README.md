@@ -4,10 +4,11 @@
 ### Progress Until Now
 
  1. Hidden Password
- 2. Help page (60%)
+ 2. Help page (70%)
  3. parsing files from arguments
  
-
+## Output
+![help.JPG](./src/help.JPG)
 
 ### Future:
 
