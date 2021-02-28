@@ -19,7 +19,6 @@ args = parser.parse_args()
 
 class CoolClass:
     
-
     def __init__(self):
         print("Super init")
         self.src = args.src
