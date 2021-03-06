@@ -3,6 +3,7 @@ import getpass
 import os
 import sys
 import time
+# from temp.pdf_check import ll
 
 # description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
 
@@ -119,6 +120,9 @@ class Encryption(CoolClass):
         print("Encryption will be done here")
         print(self.src+"\n"+self.msg+"\n"+self.tgt)
         print(self.level_of_encryption)
+        # msg, level_of_encryption, key sent to calculation function
+        # the encrypted text will be returned
+        # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self):
         print("Calculations here")
@@ -134,7 +138,7 @@ class Decryption(CoolClass):
             self.tgt = args.tgt
             self.lock(150)
             self.decrypt_here()
-            self.reverseCalculations()
+            self.calculations()
 
     def decrypt_here(self):
         print("Decryption here")
@@ -149,3 +153,6 @@ if __name__ == '__main__':
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()
+
+
+    # ll()
