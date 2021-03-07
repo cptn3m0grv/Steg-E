@@ -3,10 +3,10 @@ import getpass
 import os
 import sys
 import time
-# from temp.pdf_check import ll
-
+from modules.EasyEncrypt import easyMethod_Rotate
+from modules.EasyDecrypt import easyMethod_Decrypt
 # description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
-
+#┴
 parser = argparse.ArgumentParser(description="description")
 
 parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
@@ -21,17 +21,29 @@ args = parser.parse_args()
 class CoolClass:
     
     def __init__(self):
-        # print("Super init")
         self.src = args.src
         self.msg = args.msg
         self.tgt = args.tgt
         self.level_of_encryption = 1
 
     def putPass(self):
-
         pwd = getpass.getpass("Enter encryption key: ")
         cpwd = getpass.getpass("Confirm encrryption key: ")
         return pwd, cpwd
+
+
+    def chaabi(self, width):
+        print("""
+                                   ________
+                                  / ______ \\
+ ________________________________/ |      | \\
+/__________________________________|      | |                  
+\__     __  __     ______________  |      | | 
+   \ | /  \/  \ | /              \ |______| /  
+    |||        |||                \________/
+    /|\        /|\ 
+    \_/        \┴/
+        """.center(width))
 
     def lock(self, width):
         print("\n")
@@ -55,13 +67,6 @@ class CoolClass:
         time.sleep(0.07)
         print("   #|_______________________|#  ".center(width))
 
-
-    # def putPass(self):
-    #     pwd = getpass.getpass("Enter encryption key: ")
-    #     # print("\033[32m")
-    #     cpwd = getpass.getpass("Confirm encryption key: ")
-    #     # print("\033[39m", end="")
-    #     return pwd, cpwd
 
     def banner(self):
         print("------------------------------------------------------------------------------------------".center(100))
@@ -87,9 +92,7 @@ class CoolClass:
         self.pwd, self.cpwd = self.putPass()
             
         while(self.pwd!=self.cpwd):
-            # print("\033[31m")
             print("\nIncorrect Confirmation Key, Please enter again!!!")
-            # print("\033[39m")
             self.pwd, self.cpwd = self.putPass()
 
         print("\n '*' Symbolizes the strength of encryption, DEFAULT LEVEL: * ")
@@ -108,23 +111,21 @@ class CoolClass:
 class Encryption(CoolClass):
     
     def __init__(self):
-        # print("Encryption Called")
         self.level_of_encryption = 1
         super().__init__()
         if(self.src != None and self.msg != None):
             self.first_page()
             self.encrypt_here()
-            # self.calculations()
         else:
             print("Kuch to daal do")
 
     def encrypt_here(self):
-        # print("Encryption will be done here")
         print("Mesage entered: "+self.msg)
         print("Level of encryption chosen: "+self.level_of_encryption)
         self.encrypted_message = self.calculations(self.msg, self.level_of_encryption, self.pwd)
-
-        print("Encrypted text: "+self.encrypted_message)
+        # user's key will be added in a salt to match the key
+        # we may use some hashing method to hash the key and add it in the file
+        print("Encrypted text: "+str(self.encrypted_message.encode('utf-8')))
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self, msg, level_of_encryption, pwd):
@@ -139,7 +140,6 @@ class Encryption(CoolClass):
             msg_len = "0"+str(len(mesg))
         else:
             print("Message length is exceeding the limit of 999 characters, it will automatically sliced to first 999 characters.")
-            #we will also have to ask, if the user still wants to continue or re-enter the message
             ch = input("Would you like to continue? [Y/N]: ")
             if(ch=='N' or ch=='n'):
                 print("Program Terminated Successfully. You can try again..".center(100))
@@ -148,34 +148,39 @@ class Encryption(CoolClass):
             msg_len = "0999"
         
         salt = "{"+msg_len+self.level_of_encryption+"}" 
-        return salt+mesg+salt
+        final_msg = ""
+        if(int(self.level_of_encryption)==1):
+            final_msg = easyMethod_Rotate(mesg).decode('utf-8')
+
+        return salt+final_msg+salt
 
 class Decryption(CoolClass):
     def __init__(self):
-        print("Decryption called")
         super().__init__()
-        print(self.src, self.msg)
-        if(self.src != None and self.msg != None):
-            print("Jyada shaane mt bno")
+        if(self.src != None or self.msg != None):
+            print("Wrong Arguments!!!!!")
+            exit()
         else:
-            self.tgt = args.tgt
-            self.lock(150)
+            # self.banner()
+            self.chaabi(150)
             self.decrypt_here()
-            self.calculations()
 
     def decrypt_here(self):
-        print("Decryption here")
-        print(self.tgt)
-        # print(self.level_of_encryption)
+        decrypted_text = self.calculations(self.tgt)
+        print("Decrypted message: ", decrypted_text)
 
-    def calculations(self):
-        print("Reverse Calculations here")
+    def calculations(self, tgt):
+        with open(self.tgt, "r") as file:
+            encrypted_source_msg = file.read()
+
+        return easyMethod_Decrypt(encrypted_source_msg)
+
 
 if __name__ == '__main__':
     if(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()
-
-
-    # ll()
+    else:
+        print("Wrong Arguments!!!")
+        exit()
