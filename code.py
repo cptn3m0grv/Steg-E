@@ -21,10 +21,10 @@ args = parser.parse_args()
 class CoolClass:
     
     def __init__(self):
-        print("Super init")
+        # print("Super init")
         self.src = args.src
         self.msg = args.msg
-        self.tgt = '.'
+        self.tgt = args.tgt
         self.level_of_encryption = 1
 
     def putPass(self):
@@ -33,7 +33,7 @@ class CoolClass:
         cpwd = getpass.getpass("Confirm encrryption key: ")
         return pwd, cpwd
 
-    def lock(self, width):  
+    def lock(self, width):
         print("\n")
         print("              ******           ".center(width))
         time.sleep(0.07)
@@ -56,12 +56,12 @@ class CoolClass:
         print("   #|_______________________|#  ".center(width))
 
 
-    def putPass(self):
-        pwd = getpass.getpass("Enter encryption key: ")
-        # print("\033[32m")
-        cpwd = getpass.getpass("Confirm encryption key: ")
-        # print("\033[39m", end="")
-        return pwd, cpwd
+    # def putPass(self):
+    #     pwd = getpass.getpass("Enter encryption key: ")
+    #     # print("\033[32m")
+    #     cpwd = getpass.getpass("Confirm encryption key: ")
+    #     # print("\033[39m", end="")
+    #     return pwd, cpwd
 
     def banner(self):
         print("------------------------------------------------------------------------------------------".center(100))
@@ -90,15 +90,17 @@ class CoolClass:
             # print("\033[31m")
             print("\nIncorrect Confirmation Key, Please enter again!!!")
             # print("\033[39m")
-            pwd, cpwd = self.putPass()
+            self.pwd, self.cpwd = self.putPass()
 
         print("\n '*' Symbolizes the strength of encryption, DEFAULT LEVEL: * ")
         self.level_of_encryption = input("\tEnter the level of encryption \n\t1: *\n\t2: **\n\t3: ***\n\t==> ")
         try:
             if(not (int(self.level_of_encryption)>=1 and int(self.level_of_encryption)<=3)):
                 print("Level of encryption used will be default.")
+                self.level_of_encryption = "1"
         except:
             print("Level of encryption used will be default.")
+            self.level_of_encryption = "1"
 
     def calculations(self):
         pass
@@ -106,26 +108,47 @@ class CoolClass:
 class Encryption(CoolClass):
     
     def __init__(self):
-        print("Encryption Called")
+        # print("Encryption Called")
         self.level_of_encryption = 1
         super().__init__()
         if(self.src != None and self.msg != None):
             self.first_page()
             self.encrypt_here()
-            self.calculations()
+            # self.calculations()
         else:
             print("Kuch to daal do")
 
     def encrypt_here(self):
-        print("Encryption will be done here")
-        print(self.src+"\n"+self.msg+"\n"+self.tgt)
-        print(self.level_of_encryption)
-        # msg, level_of_encryption, key sent to calculation function
-        # the encrypted text will be returned
+        # print("Encryption will be done here")
+        print("Mesage entered: "+self.msg)
+        print("Level of encryption chosen: "+self.level_of_encryption)
+        self.encrypted_message = self.calculations(self.msg, self.level_of_encryption, self.pwd)
+
+        print("Encrypted text: "+self.encrypted_message)
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
-    def calculations(self):
-        print("Calculations here")
+    def calculations(self, msg, level_of_encryption, pwd):
+        with open(self.msg, "r") as mm:
+            mesg = mm.read()
+
+        if(len(mesg)<10):
+            msg_len = "000"+str(len(mesg))
+        elif(len(mesg)<100):
+            msg_len = "00"+str(len(mesg))
+        elif(len(mesg)<1000):
+            msg_len = "0"+str(len(mesg))
+        else:
+            print("Message length is exceeding the limit of 999 characters, it will automatically sliced to first 999 characters.")
+            #we will also have to ask, if the user still wants to continue or re-enter the message
+            ch = input("Would you like to continue? [Y/N]: ")
+            if(ch=='N' or ch=='n'):
+                print("Program Terminated Successfully. You can try again..".center(100))
+                exit()
+            mesg = mesg[0:1000]
+            msg_len = "0999"
+        
+        salt = "{"+msg_len+self.level_of_encryption+"}" 
+        return salt+mesg+salt
 
 class Decryption(CoolClass):
     def __init__(self):
