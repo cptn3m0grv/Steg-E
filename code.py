@@ -33,17 +33,16 @@ class CoolClass:
 
 
     def chaabi(self, width):
-        print("""
-                                   ________
-                                  / ______ \\
- ________________________________/ |      | \\
-/__________________________________|      | |                  
-\__     __  __     ______________  |      | | 
-   \ | /  \/  \ | /              \ |______| /  
-    |||        |||                \________/
-    /|\        /|\ 
-    \_/        \┴/
-        """.center(width))
+        print("                                     ________     ".center(width))
+        print("                                    / ______ \    ".center(width))
+        print(" __________________________________/ |      | \   ".center(width))
+        print("/____________________________________|      |  |  ".center(width))
+        print("\__     __  __     ________________  |      |  |  ".center(width))
+        print("   \ | /  \/  \ | /                \ |______| /   ".center(width))
+        print("    |||        |||                  \________/    ".center(width))
+        print("    /|\        /|\                                ".center(width))
+        print("    \_/        \┴/                                ".center(width))
+        
 
     def lock(self, width):
         print("\n")
