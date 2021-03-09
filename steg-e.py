@@ -34,14 +34,24 @@ class CoolClass:
 
     def chaabi(self, width):
         print("                                     ________     ".center(width))
+        time.sleep(0.07)
         print("                                    / ______ \    ".center(width))
+        time.sleep(0.07)
         print(" __________________________________/ |      | \   ".center(width))
+        time.sleep(0.07)
         print("/____________________________________|      |  |  ".center(width))
+        time.sleep(0.07)
         print("\__     __  __     ________________  |      |  |  ".center(width))
+        time.sleep(0.07)
         print("   \ | /  \/  \ | /                \ |______| /   ".center(width))
+        time.sleep(0.07)
         print("    |||        |||                  \________/    ".center(width))
+        time.sleep(0.07)
         print("    /|\        /|\                                ".center(width))
+        time.sleep(0.07)
         print("    \_/        \┴/                                ".center(width))
+        time.sleep(0.07)
+        print("\n\n")
         
 
     def lock(self, width):
@@ -152,7 +162,9 @@ class Decryption(CoolClass):
             print("Wrong Arguments!!!!!")
             exit()
         else:
-            # self.banner()
+            self.banner()
+            print()
+            print()
             self.chaabi(150)
             self.decrypt_here()
 
