@@ -5,6 +5,9 @@ import sys
 import time
 from modules.EasyEncrypt import easyMethod_Rotate
 from modules.EasyDecrypt import easyMethod_Decrypt
+from modules.introScreen import key_graphics
+from modules.introScreen import lock
+from modules.introScreen import banner
 # description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
 #┴
 parser = argparse.ArgumentParser(description="description")
@@ -31,65 +34,9 @@ class CoolClass:
         cpwd = getpass.getpass("Confirm encrryption key: ")
         return pwd, cpwd
 
-
-    def chaabi(self, width):
-        print("                                     ________     ".center(width))
-        time.sleep(0.07)
-        print("                                    / ______ \    ".center(width))
-        time.sleep(0.07)
-        print(" __________________________________/ |      | \   ".center(width))
-        time.sleep(0.07)
-        print("/____________________________________|      |  |  ".center(width))
-        time.sleep(0.07)
-        print("\__     __  __     ________________  |      |  |  ".center(width))
-        time.sleep(0.07)
-        print("   \ | /  \/  \ | /                \ |______| /   ".center(width))
-        time.sleep(0.07)
-        print("    |||        |||                  \________/    ".center(width))
-        time.sleep(0.07)
-        print("    /|\        /|\                                ".center(width))
-        time.sleep(0.07)
-        print("    \_/        \┴/                                ".center(width))
-        time.sleep(0.07)
-        print("\n\n")
-        
-
-    def lock(self, width):
-        print("\n")
-        print("              ******           ".center(width))
-        time.sleep(0.07)
-        print("         ***         ***        ".center(width))
-        time.sleep(0.07)
-        print("      ((*               *))     ".center(width))
-        time.sleep(0.07)
-        print("    ((*###################*))   ".center(width))
-        time.sleep(0.07)
-        print("   #|                       |#  ".center(width))
-        time.sleep(0.07)
-        print("   #|                       |#  ".center(width))
-        time.sleep(0.07)
-        print("   #|          (*)          |#  ".center(width))
-        time.sleep(0.07)
-        print("   #|          | |          |#  ".center(width))
-        time.sleep(0.07)
-        print("   #|          |_|          |#  ".center(width))
-        time.sleep(0.07)
-        print("   #|_______________________|#  ".center(width))
-
-
-    def banner(self):
-        print()
-        print("███████╗████████╗███████╗ ██████╗               ███████╗".center(150))
-        print("██╔════╝╚══██╔══╝██╔════╝██╔════╝               ██╔════╝".center(150))
-        print("███████╗   ██║   █████╗  ██║  ███╗    █████╗    █████╗  ".center(150))
-        print("╚════██║   ██║   ██╔══╝  ██║   ██║    ╚════╝    ██╔══╝  ".center(150))
-        print("███████║   ██║   ███████╗╚██████╔╝              ███████╗".center(150))
-        print("╚══════╝   ╚═╝   ╚══════╝ ╚═════╝               ╚══════╝".center(150))
-        
-
     def first_page(self):
-        self.banner()        
-        self.lock(150)
+        banner()        
+        lock(150)
         self.pwd, self.cpwd = self.putPass()
             
         while(self.pwd!=self.cpwd):
@@ -162,10 +109,10 @@ class Decryption(CoolClass):
             print("Wrong Arguments!!!!!")
             exit()
         else:
-            self.banner()
+            banner()
             print()
             print()
-            self.chaabi(150)
+            key_graphics(150)
             self.decrypt_here()
 
     def decrypt_here(self):
