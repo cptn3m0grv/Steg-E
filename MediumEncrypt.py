@@ -7,9 +7,10 @@ def MediumEncrpyt_Method(message, key):
     for i in range(message_len):
         rotateBy.append(random_seed.rand())
     rotateBy = np.array(rotateBy)
+    rotateBy = rotateBy * 10000
+    rotateBy = np.floor(rotateBy).tolist()
     print(rotateBy)
         
-
 
 def set_random_seed(key):
     vocab = dict()
@@ -22,4 +23,4 @@ def set_random_seed(key):
     random_seed = np.random.RandomState(int(seed_tobe_set))
     return random_seed
 
-MediumEncrpyt_Method("Gargeya","gagi")
+MediumEncrpyt_Method("My name is gargeya and this is a randomw test to see if the random values hold some kind of correlation with each other or not","gagi")

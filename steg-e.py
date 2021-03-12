@@ -8,6 +8,7 @@ from modules.EasyDecrypt import easyMethod_Decrypt
 from modules.introScreen import key_graphics
 from modules.introScreen import lock
 from modules.introScreen import banner
+import re
 # description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
 #┴
 parser = argparse.ArgumentParser(description="description")
@@ -70,13 +71,24 @@ class Encryption(CoolClass):
     def encrypt_here(self):
         print("Mesage entered: "+self.msg)
         print("Level of encryption chosen: "+self.level_of_encryption)
-        self.encrypted_message = self.calculations(self.msg, self.level_of_encryption, self.pwd)
+        self.encrypted_message = self.calculations()
         # user's key will be added in a salt to match the key
         # we may use some hashing method to hash the key and add it in the file
-        print("Encrypted text: "+str(self.encrypted_message.encode('utf-8')))
+        message_to_hide = self.encrypted_message.encode('utf-8')
+
+        with open(self.src, "rb") as sugar:
+            image_orig = sugar.read()
+            image_orig = image_orig+"\n".encode('utf-8')+message_to_hide
+
+        with open(self.tgt, "wb") as coffee:
+            coffee.write(image_orig)
+        
+        print("Message saved to: ", self.tgt)
+        print("\n")
+        print("Success!!!".center(150))
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
-    def calculations(self, msg, level_of_encryption, pwd):
+    def calculations(self):
         with open(self.msg, "r") as mm:
             mesg = mm.read()
 
@@ -98,7 +110,7 @@ class Encryption(CoolClass):
         salt = "{"+msg_len+self.level_of_encryption+"}" 
         final_msg = ""
         if(int(self.level_of_encryption)==1):
-            final_msg = easyMethod_Rotate(mesg).decode('utf-8')
+            final_msg = easyMethod_Rotate(mesg)
 
         return salt+final_msg+salt
 
@@ -116,14 +128,22 @@ class Decryption(CoolClass):
             self.decrypt_here()
 
     def decrypt_here(self):
-        decrypted_text = self.calculations(self.tgt)
-        print("Decrypted message: ", decrypted_text)
+        message_to_display = self.calculations()
+        print("Message here:\n\n"+message_to_display)
 
-    def calculations(self, tgt):
-        with open(self.tgt, "r") as file:
+    def calculations(self):
+        with open(self.tgt, "rb") as file:
             encrypted_source_msg = file.read()
 
-        return easyMethod_Decrypt(encrypted_source_msg)
+
+        encrypted_source_msg = re.findall(r"\{[0-9]{1,5}\}.*\{[0-9]{1,5}\}$".encode('utf-8'), encrypted_source_msg)
+        length_of_message = int(encrypted_source_msg[0].decode('utf-8')[1:5])
+        level_of_encryption = int(encrypted_source_msg[0].decode('utf-8')[5])
+
+        if(level_of_encryption == 1):
+            return easyMethod_Decrypt(encrypted_source_msg[0][7:7+length_of_message].decode('utf-8'))
+
+        # return easyMethod_Decrypt(encrypted_source_msg)
 
 
 if __name__ == '__main__':

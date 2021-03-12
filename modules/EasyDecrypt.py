@@ -22,6 +22,8 @@ def easyMethod_Decrypt(message):
     for ch in msg:
         if(ch in temp):
             rotified = rotified + rotated[temp.index(ch)]
+        elif(ch=="`"):
+            rotified = rotified + "\n"
         else:
             rotified = rotified + ch
 
