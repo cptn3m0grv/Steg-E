@@ -9,8 +9,8 @@ from modules.introScreen import key_graphics
 from modules.introScreen import lock
 from modules.introScreen import banner
 import re
-# description = "\tTo hide a message in a file:\n\t\tpython code.py encrypt --src SOURCE_FILE --msg MESSAGE_FILE --tgt PATH_WHERE_RESULT_IS_SAVED\n\tTo retrieve the hidden message from file:\n\t\tpython code.py decrypt --tgt TARGET_FILE_LOCATION\n"
-#┴
+
+
 parser = argparse.ArgumentParser(description="description")
 
 parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
@@ -76,12 +76,21 @@ class Encryption(CoolClass):
         # we may use some hashing method to hash the key and add it in the file
         message_to_hide = self.encrypted_message.encode('utf-8')
 
-        with open(self.src, "rb") as sugar:
-            image_orig = sugar.read()
-            image_orig = image_orig+"\n".encode('utf-8')+message_to_hide
+        try:
+            with open(self.src, "rb") as sugar:
+                image_orig = sugar.read()
+                image_orig = image_orig+"\n".encode('utf-8')+message_to_hide
+        except:
+            print("Source file not found!!!")
+            print("Program will now terminate!!!")
+            exit()
 
-        with open(self.tgt, "wb") as coffee:
-            coffee.write(image_orig)
+        try:
+            with open(self.tgt, "wb") as coffee:
+                coffee.write(image_orig)
+        except:
+            print("Target File Not Created!!!")
+            exit()
         
         print("Message saved to: ", self.tgt)
         print("\n")
@@ -89,8 +98,12 @@ class Encryption(CoolClass):
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self):
-        with open(self.msg, "r") as mm:
-            mesg = mm.read()
+        try:
+            with open(self.msg, "r") as mm:
+                mesg = mm.read()
+        except:
+            print("Unable to read message file!!!")
+            exit()
 
         if(len(mesg)<10):
             msg_len = "000"+str(len(mesg))
@@ -132,8 +145,13 @@ class Decryption(CoolClass):
         print("Message here:\n\n"+message_to_display)
 
     def calculations(self):
-        with open(self.tgt, "rb") as file:
-            encrypted_source_msg = file.read()
+        try:
+            with open(self.tgt, "rb") as file:
+                encrypted_source_msg = file.read()
+        except:
+            print("Unable to read target file!!!")
+            print("Program will now terminate!!!")
+            exit()
 
 
         encrypted_source_msg = re.findall(r"\{[0-9]{1,5}\}.*\{[0-9]{1,5}\}$".encode('utf-8'), encrypted_source_msg)
