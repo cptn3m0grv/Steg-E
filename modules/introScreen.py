@@ -51,6 +51,7 @@ def lock(width):
     print(Style.BRIGHT+Fore.YELLOW+"    ▓          |_|          ▓  ".center(width))
     time.sleep(0.07)
     print(Style.BRIGHT+Fore.YELLOW+"    ▓▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▓  ".center(width))
+    print()
 
 
 def banner():

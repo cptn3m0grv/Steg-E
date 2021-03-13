@@ -125,7 +125,7 @@ class Encryption(StegE):
         final_msg = ""
 
         if(int(self.level_of_encryption)==1):
-            final_msg = easyMethod_Rotate(mesg)
+            final_msg = easyMethod_Rotate(mesg, self.pwd)
         elif(int(self.level_of_encryption)==2):
             pass
         elif(int(self.level_of_encryption)==3):
@@ -164,8 +164,11 @@ class Decryption(StegE):
         length_of_message = int(encrypted_source_msg[0].decode('utf-8')[1:5])
         level_of_encryption = int(encrypted_source_msg[0].decode('utf-8')[5])
 
+        tulsi = input("Enter the password to Decrypt: ")
+
+
         if(level_of_encryption == 1):
-            return easyMethod_Decrypt(encrypted_source_msg[0][7:7+length_of_message].decode('utf-8'))
+            return easyMethod_Decrypt(encrypted_source_msg[0][7:7+length_of_message].decode('utf-8'), tulsi)
         elif(level_of_encryption == 2):
             pass
         elif(level_of_encryption == 3):
