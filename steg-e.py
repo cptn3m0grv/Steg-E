@@ -3,13 +3,15 @@ import getpass
 import os
 import sys
 import time
-from modules.EasyEncrypt import easyMethod_Rotate
-from modules.EasyDecrypt import easyMethod_Decrypt
-from modules.introScreen import key_graphics
-from modules.introScreen import lock
-from modules.introScreen import banner
+from modules.Easy.EasyEncrypt import easyMethod_Rotate
+from modules.Easy.EasyDecrypt import easyMethod_Decrypt
+from modules.Intro.introScreen import key_graphics
+from modules.Intro.introScreen import lock
+from modules.Intro.introScreen import banner
 import re
-
+import colorama
+from colorama import Fore, Style
+colorama.init(autoreset=True)
 
 parser = argparse.ArgumentParser(description="description")
 
@@ -32,7 +34,7 @@ class StegE:
 
     def putPass(self):
         pwd = getpass.getpass("Enter encryption key: ")
-        cpwd = getpass.getpass("Confirm encrryption key: ")
+        cpwd = getpass.getpass("Confirm encryption key: ")
         return pwd, cpwd
 
     def first_page(self):
@@ -41,17 +43,18 @@ class StegE:
         self.pwd, self.cpwd = self.putPass()
             
         while(self.pwd!=self.cpwd):
-            print("\nIncorrect Confirmation Key, Please enter again!!!")
+            print("\n"+Fore.RED+"Incorrect Confirmation Key, Please enter again!!!")
             self.pwd, self.cpwd = self.putPass()
 
         print("\n '*' Symbolizes the strength of encryption, DEFAULT LEVEL: * ")
-        self.level_of_encryption = input("\tEnter the level of encryption \n\t1: *\n\t2: **\n\t3: ***\n\t==> ")
+        print(Fore.CYAN+"\tEnter the level of encryption \n\t1: *\n\t2: **\n\t3: ***\n\t==> ", end=" ")
+        self.level_of_encryption = input()
         try:
             if(not (int(self.level_of_encryption)>=1 and int(self.level_of_encryption)<=3)):
-                print("Level of encryption used will be default.")
+                print(Fore.GREEN+"Level of encryption used will be default.")
                 self.level_of_encryption = "1"
         except:
-            print("Level of encryption used will be default.")
+            print(Fore.GREEN+"Level of encryption used will be default.")
             self.level_of_encryption = "1"
 
     def calculations(self):
@@ -66,14 +69,12 @@ class Encryption(StegE):
             self.first_page()
             self.encrypt_here()
         else:
-            print("Kuch to daal do")
+            print(Style.BRIGHT+Fore.RED+"Wrong Arguments!!!")
+            exit()
 
     def encrypt_here(self):
-        print("Mesage entered: "+self.msg)
         print("Level of encryption chosen: "+self.level_of_encryption)
         self.encrypted_message = self.calculations()
-        # user's key will be added in a salt to match the key
-        # we may use some hashing method to hash the key and add it in the file
         message_to_hide = self.encrypted_message.encode('utf-8')
 
         try:
@@ -81,20 +82,20 @@ class Encryption(StegE):
                 image_orig = sugar.read()
                 image_orig = image_orig+message_to_hide
         except:
-            print("Source file not found!!!")
-            print("Program will now terminate!!!")
+            print(Fore.RED+"Source file not found!!!")
+            print(Fore.RED+"Program will now terminate!!!")
             exit()
 
         try:
             with open(self.tgt, "wb") as coffee:
                 coffee.write(image_orig)
         except:
-            print("Target File Not Created!!!")
+            print(Fore.RED+"Target File Not Created!!!")
             exit()
         
-        print("Target saved to: ", self.tgt)
+        print(Fore.GREEN+"Target saved to: ", self.tgt)
         print("\n")
-        print("Success!!!".center(150))
+        print(Fore.GREEN+"**** Success ****".center(150))
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self):
@@ -103,7 +104,7 @@ class Encryption(StegE):
             with open(self.msg, "r") as mm:
                 mesg = mm.read()
         except:
-            print("Unable to read message file!!!")
+            print(Fore.RED+"Unable to read message file!!!")
             exit()
 
         if(len(mesg)<10):
@@ -116,7 +117,7 @@ class Encryption(StegE):
             print("Message length is exceeding the limit of 999 characters, it will automatically sliced to first 999 characters.")
             ch = input("Would you like to continue? [Y/N]: ")
             if(ch=='N' or ch=='n'):
-                print("Program Terminated Successfully. You can try again..".center(100))
+                print(Fore.RED+"Program Terminated Successfully. You can try again..".center(100))
                 exit()
             mesg = mesg[0:1000]
             msg_len = "0999"
@@ -137,7 +138,7 @@ class Decryption(StegE):
     def __init__(self):
         super().__init__()
         if(self.src != None or self.msg != None):
-            print("Wrong Arguments!!!!!")
+            print(Fore.RED+"Wrong Arguments!!!!!")
             exit()
         else:
             banner()
@@ -148,15 +149,28 @@ class Decryption(StegE):
 
     def decrypt_here(self):
         message_to_display = self.calculations()
-        print("Message here:\n\n"+message_to_display)
+        print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
+        ch = input()
+        ch = ch.lower()
+        if(ch=='y'):
+            output_file = input("Enter the output location: ")
+            try:
+                with open(output_file, "w") as ginger:
+                    ginger.write(message_to_display)
+            except:
+                print(Fore.RED+"Cannot save output to file.")
+        elif(not(ch=='n')):
+            print("Not a valid choice, message will only be displayed on terminal.")
+
+        print("\nMessage here:\n"+Fore.CYAN+message_to_display)
 
     def calculations(self):
         try:
             with open(self.tgt, "rb") as file:
                 encrypted_source_msg = file.read()
         except:
-            print("Unable to read target file!!!")
-            print("Program will now terminate!!!")
+            print(Fore.RED+"Unable to read target file!!!")
+            print(Fore.RED+"Program will now terminate!!!")
             exit()
 
 
@@ -174,14 +188,11 @@ class Decryption(StegE):
         elif(level_of_encryption == 3):
             pass
 
-        # return easyMethod_Decrypt(encrypted_source_msg)
-
-
 if __name__ == '__main__':
     if(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()
     else:
-        print("Wrong Arguments!!!")
+        print(Fore.RED+"Wrong Arguments!!!")
         exit()
