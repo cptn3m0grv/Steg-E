@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 ################################################ CLASSES #########################################################
 
-class CoolClass:
+class StegE:
     
     def __init__(self):
         self.src = args.src
@@ -57,7 +57,7 @@ class CoolClass:
     def calculations(self):
         pass
 
-class Encryption(CoolClass):
+class Encryption(StegE):
     
     def __init__(self):
         self.level_of_encryption = 1
@@ -79,7 +79,7 @@ class Encryption(CoolClass):
         try:
             with open(self.src, "rb") as sugar:
                 image_orig = sugar.read()
-                image_orig = image_orig+"\n".encode('utf-8')+message_to_hide
+                image_orig = image_orig+message_to_hide
         except:
             print("Source file not found!!!")
             print("Program will now terminate!!!")
@@ -92,12 +92,13 @@ class Encryption(CoolClass):
             print("Target File Not Created!!!")
             exit()
         
-        print("Message saved to: ", self.tgt)
+        print("Target saved to: ", self.tgt)
         print("\n")
         print("Success!!!".center(150))
         # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self):
+        
         try:
             with open(self.msg, "r") as mm:
                 mesg = mm.read()
@@ -122,12 +123,17 @@ class Encryption(CoolClass):
         
         salt = "{"+msg_len+self.level_of_encryption+"}" 
         final_msg = ""
+
         if(int(self.level_of_encryption)==1):
             final_msg = easyMethod_Rotate(mesg)
+        elif(int(self.level_of_encryption)==2):
+            pass
+        elif(int(self.level_of_encryption)==3):
+            pass
 
         return salt+final_msg+salt
 
-class Decryption(CoolClass):
+class Decryption(StegE):
     def __init__(self):
         super().__init__()
         if(self.src != None or self.msg != None):
@@ -160,6 +166,10 @@ class Decryption(CoolClass):
 
         if(level_of_encryption == 1):
             return easyMethod_Decrypt(encrypted_source_msg[0][7:7+length_of_message].decode('utf-8'))
+        elif(level_of_encryption == 2):
+            pass
+        elif(level_of_encryption == 3):
+            pass
 
         # return easyMethod_Decrypt(encrypted_source_msg)
 
