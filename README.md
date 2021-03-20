@@ -10,7 +10,7 @@
  5. Method of extracting the encrpyted message file.
  
 ## Output
-![help.JPG](./src/help.JPG)
+![STEG-E](./src/banner.png)
 
 ### Future:
 
