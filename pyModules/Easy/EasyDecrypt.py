@@ -1,6 +1,6 @@
 def reverseRotateHere(temp, rotTimes):
     n = len(temp)
-    rotTimes = (82-rotTimes)%n
+    rotTimes = (n-rotTimes)%n
     resultL = temp[0:rotTimes]
     resultL = resultL[::-1]
     resultR = temp[rotTimes:n]
