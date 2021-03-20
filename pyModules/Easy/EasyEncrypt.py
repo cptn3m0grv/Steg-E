@@ -1,9 +1,9 @@
 def rotateHere(temp, rotTimes):
     n = len(temp)
-    d = rotTimes%n
-    resultL = temp[0:d]
+    rotTimes = rotTimes%n
+    resultL = temp[0:rotTimes]
     resultL = resultL[::-1]
-    resultR = temp[d:n]
+    resultR = temp[rotTimes:n]
     resultR = resultR[::-1]
 
     result = resultL + resultR
