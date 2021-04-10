@@ -1,5 +1,5 @@
 import numpy as np
-# from customDict import ourDict
+import textwrap as tw
 
 ourDict = {
     "a": "ஓ",
@@ -127,24 +127,24 @@ def splitMessage(message):
 
     return part1, part2
 
-def rotateHere(temp, rotTimes):
+def reverseRotateHere(temp, rotTimes):
     n = len(temp)
-    rotTimes = rotTimes%n
+    rotTimes = (n-rotTimes)%n
     resultL = temp[0:rotTimes]
     resultL = resultL[::-1]
     resultR = temp[rotTimes:n]
-    resultR = resultR[::-1]
+    resultR = resultR[::-1] 
 
     result = resultL + resultR
     result = result[::-1]
     return result
 
-def easyMethod_Rotate(message, pwd):
+def easyMethod_Decrypt(message, tulsi):
 
     rotTimes = 0
     idx = 1
 
-    for chAt in pwd:
+    for chAt in tulsi:
         rotTimes = rotTimes + (ord(chAt)*idx)
         idx += 1
 
@@ -154,38 +154,43 @@ def easyMethod_Rotate(message, pwd):
     temp = temp + "'"
     temp = temp + '"'
 
-    rotated = rotateHere(temp, rotTimes)
+    rotated = reverseRotateHere(temp, rotTimes)
 
     temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
     temp = temp.split(" ")
     temp.extend([" ", "'", '"'])
 
-    msg = message[::-1]
+    msg = message
+    msg = msg[::-1] ## Reversing the message string
     rotified = ""
     for ch in msg:
         if(ch in temp):
             rotified = rotified + rotated[temp.index(ch)]
-        elif(ch=='\n'):
-            rotified = rotified + "`"
+        elif(ch=="`"):
+            rotified = rotified + "\n"
         else:
             rotified = rotified + ch
 
 
     return rotified
 
-def MediumEncrpyt_Method(message, key):
-    result = ""
-    message_len = len(message)
-    rotateBy = list()
+def MediumDecrypt_Method(en_message, key):
+    en_list = tw.wrap(en_message, 4)
+    # print(en_list)
     random_seed = set_random_seed(key)
-    rotateBy = random_seed.randint(0, 9900, message_len)
-    mess_int = string_to_list(message)
-    mess_int = np.array(mess_int)
-    resultant_sum = mess_int + rotateBy
-    for i in resultant_sum:
-        result = result+"{:04d}".format(i)
+    rotateBy = random_seed.randint(0, 9900, len(en_list))
+    en_list = np.array(en_list, dtype=np.int)
+    decrpyted_list = en_list - rotateBy
+    vocab = dict()
+    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
+    temp = temp.split(" ")
+    temp.extend([" ", "`", "'", '"', "\n"])
+    for key,value in enumerate(temp):
+        vocab[key] = value
+    int_to_char = list(map(lambda x:vocab[x], decrpyted_list))
+    result = "".join(int_to_char)
     return result
-        
+
 def set_random_seed(key):
     vocab = dict()
     seed_tobe_set = ""
@@ -199,60 +204,35 @@ def set_random_seed(key):
     for i in key.lower():
         seed_tobe_set = seed_tobe_set + str(vocab[i])
     random_seed = np.random.RandomState(int(seed_tobe_set)%((2**32)-2))
-    return random_seed
+    return random_seed   
 
-def string_to_list(string):
-    char_list = list()
-    vocab = dict()
-    for char in string:
-        char_list.append(char)
-    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
-    temp = temp.split(" ")
-    temp.extend([" ", "`", "'", '"', "\n"])
-    for key,value in enumerate(temp):
-        vocab[value] = key
-    char_to_int = list(map(lambda x:vocab[x], char_list))
-    return char_to_int
+def hard_decrypt(message, key1):
 
-def hard_encrypt(message, key):
-    message_noNextLine = ""
+    customDecryptDict = dict()
+
+    for key, value in ourDict.items():
+        customDecryptDict[value] = key
+
+    cl = list(customDecryptDict.keys())
+
+    actual_message = ""
 
     for ch in message:
-        if ch=='\n':
-            message_noNextLine = message_noNextLine + '`'
+        if(ch in cl):
+            actual_message = actual_message + customDecryptDict[ch]
         else:
-            message_noNextLine = message_noNextLine + ch
+            actual_message = actual_message + ch
 
-    msg_part1, msg_part2 = splitMessage(message_noNextLine)
-    key_part1, key_part2 = splitMessage(key)
+    message = actual_message
 
-    # print(key_part1)
-    # print(key_part2)
+    part1, part2 = message.split("Z")
+    
+    key_part1, key_part2 = splitMessage(key1)
 
-    encrpyted_part1 = easyMethod_Rotate(msg_part1, key_part1)
-    encrpyted_part2 = MediumEncrpyt_Method(msg_part2, key_part2)
+    decrypted_part1 = easyMethod_Decrypt(part1, key_part1)
+    decrypted_part2 = MediumDecrypt_Method(part2, key_part2)
 
-    #HARD ENCRYPTION 
+    decrypted_part1 = decrypted_part1.replace("`", "\n")
+    decrypted_part2 = decrypted_part2.replace("`", "\n")
 
-    encrpyted_part1  = encrpyted_part1 # koi bhi func
-    encrpyted_part2 = encrpyted_part2 #koi bhi func
-
-    #HARD ENCRYPTION ENDS
-
-    encrpyted_message = ""
-
-    for ch in encrpyted_part1:
-        if isValid(ch):
-            encrpyted_message = encrpyted_message + ourDict[ch]
-        else:
-            encrpyted_message = encrpyted_message + ch
-
-    encrpyted_message = encrpyted_message + "Z"
-
-    for ch in encrpyted_part2:
-        if(isValid(ch)):
-            encrpyted_message = encrpyted_message + ourDict[ch]
-        else:
-            encrpyted_message = encrpyted_message + ch
-
-    return encrpyted_message
+    return (decrypted_part1 + decrypted_part2)
