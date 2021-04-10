@@ -17,7 +17,11 @@ def MediumEncrpyt_Method(message, key):
 def set_random_seed(key):
     vocab = dict()
     seed_tobe_set = ""
-    corpus = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    corpus = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]'
+    corpus = corpus + "{"
+    corpus = corpus + '}/|;:,.<>?~ `'
+    corpus = corpus + "'"
+    corpus = corpus + '"'
     for index, i in enumerate(corpus):
         vocab[i] = index
     for i in key.lower():
@@ -31,9 +35,9 @@ def string_to_list(string):
     vocab = dict()
     for char in string:
         char_list.append(char)
-    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) < > ? + - _ /'
+    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
     temp = temp.split(" ")
-    temp.extend([" ", ",", ".", '\n', "'"])
+    temp.extend([" ", "`", "'", '"', "\n"])
     for key,value in enumerate(temp):
         vocab[value] = key
     char_to_int = list(map(lambda x:vocab[x], char_list))

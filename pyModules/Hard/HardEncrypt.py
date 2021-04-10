@@ -1,4 +1,5 @@
 import numpy as np
+from customDict import ourDict
 
 def isValid(aChar):
     if ord(aChar)>=97 and ord(aChar)<=122:
@@ -10,7 +11,7 @@ def isValid(aChar):
     if ord(aChar)>=48 and ord(aChar)<=57:
         return True
 
-    validList = [ord('!'), ord('@'), ord('#'), ord('$'), ord('%'), ord('^'), ord('&'), ord('*'), ord('('), ord(')'), ord('-'), ord('_'), ord('='), ord('+'), ord('['), ord(']'), ord('{'), ord('}'), ord('/'), ord('|'), ord(';'), ord(':'), ord(','), ord('.'), ord('<'), ord('>'), ord('?'), ord('~'), ord(' '), ord('`')]
+    validList = [ord('!'), ord('@'), ord('#'), ord('$'), ord('%'), ord('^'), ord('&'), ord('*'), ord('('), ord(')'), ord('-'), ord('_'), ord('='), ord('+'), ord('['), ord(']'), ord('{'), ord('}'), ord('/'), ord('|'), ord(';'), ord(':'), ord(','), ord('.'), ord('<'), ord('>'), ord('?'), ord('~'), ord(' '), ord('`'), ord('"'), ord("'")]
 
     if(ord(aChar) in validList):
         return True
@@ -50,11 +51,18 @@ def easyMethod_Rotate(message, pwd):
         rotTimes = rotTimes + (ord(chAt)*idx)
         idx += 1
 
-    temp = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?+-_/ ,.'
+    temp = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]'
+    temp = temp + "{"
+    temp = temp + '}/|;:,.<>?~ '
+    temp = temp + "'"
+    temp = temp + '"'
+
     rotated = rotateHere(temp, rotTimes)
-    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) < > ? + - _ /'
+
+    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
     temp = temp.split(" ")
-    temp.extend([" ", ",", "."])
+    temp.extend([" ", "'", '"'])
+
     msg = message[::-1]
     rotified = ""
     for ch in msg:
@@ -84,7 +92,11 @@ def MediumEncrpyt_Method(message, key):
 def set_random_seed(key):
     vocab = dict()
     seed_tobe_set = ""
-    corpus = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    corpus = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]'
+    corpus = corpus + "{"
+    corpus = corpus + '}/|;:,.<>?~ `'
+    corpus = corpus + "'"
+    corpus = corpus + '"'
     for index, i in enumerate(corpus):
         vocab[i] = index
     for i in key.lower():
@@ -97,110 +109,15 @@ def string_to_list(string):
     vocab = dict()
     for char in string:
         char_list.append(char)
-    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) < > ? + - _ /`'
+    temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
     temp = temp.split(" ")
-    temp.extend([" ", ",", ".", '\n', "'", "`"])
+    temp.extend([" ", "`", "'", '"', "\n"])
     for key,value in enumerate(temp):
         vocab[value] = key
     char_to_int = list(map(lambda x:vocab[x], char_list))
     return char_to_int
 
-def hard_encrypt(message, key1, key2):
-    customDict = {
-    "a": "ஓ",
-    "b": "ఇ",
-    "c": "ग",
-    "d": "傷",
-    "e": "捥",
-    "f": "䆇",
-    "g": "᧮",
-    "h": "θ",
-    "i": "Я",
-    "j": "∑",
-    "k": "ב",
-    "l": "ꌓ",
-    "m": "ꋌ",
-    "n": "Ў",
-    "o": "Ҫ",
-    "p": "Ĭ",
-    "q": "؊",
-    "r": "ǿ",
-    "s": "ڭ",
-    "t": "ࢯ",
-    "u": "ݟ",
-    "v": "ᴓ",
-    "w": "₷",
-    "x": "שּ",
-    "y": "ﭧ",
-    "z": "ﭲ",
-    "A": "ﾛ",
-    "B": "ﾙ",
-    "C": "ﾖ",
-    "D": "ﾔ",
-    "E": "ﾒ",
-    "F": "ﾐ",
-    "G": "ﾎ",
-    "H": "ﾋ",
-    "I": "ﾈ",
-    "J": "ﾇ",
-    "K": "ﾂ",
-    "L": "ﾀ",
-    "M": "ｽ",
-    "N": "ｻ",
-    "O": "舘",
-    "P": "頻",
-    "Q": "辶",
-    "R": "賓",
-    "S": "艹",
-    "T": "者",
-    "U": "爫",
-    "V": "漢",
-    "W": "兀",
-    "X": "立",
-    "Y": "淋",
-    "Z": "藺",
-    "1": "吝",
-    "2": "理",
-    "3": "李",
-    "4": "履",
-    "5": "隆",
-    "6": "栗",
-    "7": "律",
-    "8": "戮",
-    "9": "落",
-    "0": "颪",
-    "!": "坭",
-    "@": "≠",
-    "#": "◊",
-    "$": "Ω",
-    "%": "‡",
-    "^": "Õ",
-    "&": "÷",
-    "*": "ê",
-    "(": "Ã",
-    ")": "Å",
-    "-": "®",
-    "_": "¤",
-    "=": "§",
-    "+": "©",
-    "[": "¯",
-    "]": "Ë",
-    "{": "¢",
-    "}": "ß",  
-    "/": "Š",
-    "|": "∞",
-    ";": "Œ",
-    ":": "Ü",
-    ",": "Ž",
-    ".": "Ð",
-    "<": "¨",
-    ">": "™",
-    "?": "￦",
-    "~": "｠",
-    " ": "Θ",
-    '`': '`'
-    }
-
+def hard_encrypt(message, key):
     message_noNextLine = ""
 
     for ch in message:
@@ -210,9 +127,13 @@ def hard_encrypt(message, key1, key2):
             message_noNextLine = message_noNextLine + ch
 
     msg_part1, msg_part2 = splitMessage(message_noNextLine)
+    key_part1, key_part2 = splitMessage(key)
 
-    encrpyted_part1 = easyMethod_Rotate(msg_part1, key1)
-    encrpyted_part2 = MediumEncrpyt_Method(msg_part2, key2)
+    print(key_part1)
+    print(key_part2)
+
+    encrpyted_part1 = easyMethod_Rotate(msg_part1, key_part1)
+    encrpyted_part2 = MediumEncrpyt_Method(msg_part2, key_part2)
 
     print(msg_part1)
     print(encrpyted_part1)
@@ -223,16 +144,18 @@ def hard_encrypt(message, key1, key2):
 
     for ch in encrpyted_part1:
         if isValid(ch):
-            encrpyted_message = encrpyted_message + customDict[ch]
+            encrpyted_message = encrpyted_message + ourDict[ch]
         else:
-            encrpyted_message = encrpyted_message + ch\
+            encrpyted_message = encrpyted_message + ch
+
+    # encrpyted_message = encrpyted_message + " break "
 
     for ch in encrpyted_part2:
         if(isValid(ch)):
-            encrpyted_message = encrpyted_message + customDict[ch]
+            encrpyted_message = encrpyted_message + ourDict[ch]
         else:
             encrpyted_message = encrpyted_message + ch
 
     return encrpyted_message
 
-print(hard_encrypt("My name is Gaurav Goyal,\nI am 20 years old!","teraBaap","haaTeraBaap"))
+print(hard_encrypt("My\n'name' is GauRav \"Goyal\",\nI am 20 years old!","teraBaap"))
