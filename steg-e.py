@@ -3,6 +3,9 @@ import getpass
 import os
 import sys
 import time
+import math
+import random
+import re
 from pyModules.Easy.EasyEncrypt import easyMethod_Rotate
 from pyModules.Easy.EasyDecrypt import easyMethod_Decrypt
 from pyModules.Medium.MediumEncrypt import MediumEncrpyt_Method
@@ -12,7 +15,6 @@ from pyModules.Hard.HardDecrypt import hard_decrypt
 from pyModules.Intro.introScreen import key_graphics
 from pyModules.Intro.introScreen import lock
 from pyModules.Intro.introScreen import banner
-import re
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
@@ -44,11 +46,20 @@ class StegE:
     def first_page(self):
         banner()        
         lock(150)
-        self.pwd, self.cpwd = self.putPass()
-            
-        while(self.pwd!=self.cpwd):
-            print("\n"+Fore.RED+"Incorrect Confirmation Key, Please enter again!!!")
+
+        try:
             self.pwd, self.cpwd = self.putPass()
+        except:
+            print("\n"+Fore.RED+"Terminating program!!!")
+            exit()
+            
+        while(self.pwd!=self.cpwd or len(self.pwd) == 0 or len(self.pwd) == 0):
+            print("\n"+Fore.RED+"Incorrect Confirmation Key, Please enter again!!!")
+            try:
+                self.pwd, self.cpwd = self.putPass()
+            except:
+                print("\n"+Fore.RED+"Terminating program!!!")
+                exit()
 
         print("\n '*' Symbolizes the strength of encryption, DEFAULT LEVEL: * ")
         print(Fore.CYAN+"\tEnter the level of encryption \n\t1: *\n\t2: **\n\t3: ***\n\t==> ", end=" ")
@@ -80,16 +91,13 @@ class Encryption(StegE):
         print("Level of encryption chosen: "+self.level_of_encryption)
         self.encrypted_message = self.calculations()
         
-        if(self.level_of_encryption == "1" or self.level_of_encryption == "2"):
+        if(self.level_of_encryption == "1" or self.level_of_encryption == "2" or self.level_of_encryption == "3"):
             message_to_hide = self.encrypted_message.encode('utf-8')
-        elif(self.level_of_encryption == "3"):
-            message_to_hide = self.encrypted_message.encode('utf-8')
-            print(message_to_hide.decode('utf-8'))
-
+                    
         try:
             with open(self.src, "rb") as sugar:
                 image_orig = sugar.read()
-                image_orig = image_orig+message_to_hide
+                image_orig = image_orig + message_to_hide
         except:
             print(Fore.RED+"Source file not found!!!")
             print(Fore.RED+"Program will now terminate!!!")
@@ -101,14 +109,12 @@ class Encryption(StegE):
         except:
             print(Fore.RED+"Target File Not Created!!!")
             exit()
-        
+
         print(Fore.GREEN+"Target saved to: ", self.tgt)
         print("\n")
         print(Fore.GREEN+"**** Success ****".center(150))
-        # the encrypted text will then be hidden into the src file and save it in tgt location
 
     def calculations(self):
-
         if(int(self.level_of_encryption)==1):
             try:
                 with open(self.msg, "r") as mm:
@@ -137,8 +143,7 @@ class Encryption(StegE):
             salt = "$3%`/"
             rem = self.level_of_encryption+"@" 
             final_msg = ""
-            final_msg = easyMethod_Rotate(mesg, self.pwd)
-            
+            final_msg = easyMethod_Rotate(mesg, self.pwd)   
             return salt+rem+final_msg+salt  
 
         elif(int(self.level_of_encryption)==2):
@@ -148,12 +153,9 @@ class Encryption(StegE):
             except:
                 print(Fore.RED+"Unable to read message file!!!")
                 exit()
-
             ecr_msg = MediumEncrpyt_Method(cocoa, self.pwd)
-
             salt = "$3%`/"
             rem = self.level_of_encryption+"@"
-
             return salt+rem+ecr_msg+salt
 
         elif(int(self.level_of_encryption)==3):
@@ -163,12 +165,9 @@ class Encryption(StegE):
             except:
                 print(Fore.RED+"Unable to read message file!!!")
                 exit()
-
             ecr_msg = hard_encrypt(cola, self.pwd)
-
-            salt = "$3|\|!)|\|U!)3$"
-            rem = "@"+self.level_of_encryption+"@"
-
+            salt = "$3%`/"
+            rem = self.level_of_encryption+"@"
             return salt+rem+ecr_msg+salt
 
 
@@ -204,7 +203,6 @@ class Decryption(StegE):
         print("\nMessage here:\n"+Fore.CYAN+message_to_display)
 
     def calculations(self):
-
         try:
             with open(self.tgt, "rb") as file:
                 encrypted_source_msg = file.read()
@@ -214,54 +212,37 @@ class Decryption(StegE):
             exit()
 
         try:
-            try:
-                encrypted_source_msg_temp = re.findall(r"\$3%`\/[123]@.*\$3%`\/".encode('utf-8'), encrypted_source_msg)
-            except:
-                print("Encryption is level 3rd.")
+            encrypted_source_msg_temp = re.findall(r"\$3%`\/[123]@.*\$3%`\/".encode('utf-8'), encrypted_source_msg)
+            # encrypted_source_msg_level_3 = re.findall(r"\$3\|\\\|!\)\|\\\|U!\)3\$@3@.*\$3\|\\\|!\)\|\\\|U!\)3\$".encode('utf-8'), encrypted_source_msg)
 
-            try:
-                encrypted_source_msg_level_3 = re.findall(r"\$3\|\\\|!\)\|\\\|U!\)3\$@3@.*\$3\|\\\|!\)\|\\\|U!\)3\$".encode('utf-8'), encrypted_source_msg)
-            except:
-                print("Encryption not of level 3.")
-
-            # print(encrypted_source_msg_level_3)
-            if(len(encrypted_source_msg_level_3)>0):
-                level_of_encryption = int(encrypted_source_msg_level_3[0].decode('utf-8')[16])
-            else:
-                level_of_encryption = int(encrypted_source_msg_temp[0].decode('utf-8')[5])
+            # if(len(encrypted_source_msg_level_3)>0):
+            #     level_of_encryption = int(encrypted_source_msg_level_3[0].decode('utf-8')[16])
+            # else:
+            level_of_encryption = int(encrypted_source_msg_temp[0].decode('utf-8')[5])
         except:
             print(Fore.RED+Style.BRIGHT+"The file has no encrypted message hidden.")
             exit()
 
         if(level_of_encryption == 1):
-            
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
             tulsi = input("Enter the password to Decrypt: ")
-            
             return easyMethod_Decrypt(msg_to_decrypt, tulsi)
 
         elif(level_of_encryption == 2):
-
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-
             tulsi = input("Enter the password to Decrypt: ")
-            
             try:
                 return MediumDecrypt_Method(msg_to_decrypt, tulsi)
             except:
                 return "Incorrect Key"
 
         elif(level_of_encryption == 3):
-            msg_to_decrypt = encrypted_source_msg_level_3[0].decode('utf-8')[18:-15]
-
+            msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
             tulsi = input("Enter the password to Decrypt: ")
-
             try:
                 return hard_decrypt(msg_to_decrypt, tulsi)
             except:
                 return "Incorrect Key"
-
-
 
 if __name__ == '__main__':
     if(args.choice=='encrypt'):

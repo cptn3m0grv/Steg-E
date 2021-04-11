@@ -215,23 +215,28 @@ def hard_decrypt(message, key1):
 
     cl = list(customDecryptDict.keys())
 
+    part1, part2 = message.split("Z")
+    key_part1, key_part2 = splitMessage(key1)
+
     actual_message = ""
 
-    for ch in message:
+    for ch in part1:
         if(ch in cl):
             actual_message = actual_message + customDecryptDict[ch]
         else:
             actual_message = actual_message + ch
 
-    message = actual_message
-
-    part1, part2 = message.split("Z")
+    decrypted_part1 = easyMethod_Decrypt(actual_message, key_part1)
     
-    key_part1, key_part2 = splitMessage(key1)
+    actual_message = ""
+    for ch in part2:
+        if(ch in cl):
+            actual_message = actual_message + customDecryptDict[ch]
+        else:
+            actual_message = actual_message + ch
 
-    decrypted_part1 = easyMethod_Decrypt(part1, key_part1)
-    decrypted_part2 = MediumDecrypt_Method(part2, key_part2)
-
+    decrypted_part2 = MediumDecrypt_Method(actual_message, key_part2)
+    
     decrypted_part1 = decrypted_part1.replace("`", "\n")
     decrypted_part2 = decrypted_part2.replace("`", "\n")
 
