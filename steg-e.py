@@ -20,9 +20,9 @@ colorama.init(autoreset=True)
 parser = argparse.ArgumentParser(description="description")
 
 parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
-parser.add_argument('--src', help='Enter the location of source file (image, pdf, network packets)')
-parser.add_argument('--msg', help='Enter the location of message to hide.')
-parser.add_argument('--tgt', help='Enter the path to save output file.')
+parser.add_argument('--carrier', help='Enter the location of source file (image, pdf, network packets)')
+parser.add_argument('--data', help='Enter the location of message to hide.')
+parser.add_argument('--result', help='Enter the path to save output file.')
 
 args = parser.parse_args()
 
@@ -31,9 +31,9 @@ args = parser.parse_args()
 class StegE:
     
     def __init__(self):
-        self.src = args.src
-        self.msg = args.msg
-        self.tgt = args.tgt
+        self.src = args.carrier
+        self.msg = args.data
+        self.tgt = args.result
         self.level_of_encryption = 1
 
     def putPass(self):
@@ -256,10 +256,10 @@ class Decryption(StegE):
 
             tulsi = input("Enter the password to Decrypt: ")
 
-            # try:
-            return hard_decrypt(msg_to_decrypt, tulsi)
-            # except:
-            #     return "Incorrect Key"
+            try:
+                return hard_decrypt(msg_to_decrypt, tulsi)
+            except:
+                return "Incorrect Key"
 
 
 
