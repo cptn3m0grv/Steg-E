@@ -50,7 +50,8 @@ class StegE:
         try:
             self.pwd, self.cpwd = self.putPass()
         except:
-            print("\n"+Fore.RED+"Terminating program!!!")
+            print("^C")
+            print(Fore.RED+"Terminating program!!!")
             exit()
             
         while(self.pwd!=self.cpwd or len(self.pwd) == 0 or len(self.pwd) == 0):
@@ -58,7 +59,8 @@ class StegE:
             try:
                 self.pwd, self.cpwd = self.putPass()
             except:
-                print("\n"+Fore.RED+"Terminating program!!!")
+                print("^C")
+                print(Fore.RED+"Terminating program!!!")
                 exit()
 
         print("\n '*' Symbolizes the strength of encryption, DEFAULT LEVEL: * ")
