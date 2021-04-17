@@ -3,12 +3,11 @@ import cowsay
 
 # about_banner = [cowsay.cheese('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.daemon('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.dragon('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.kitty('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.meow('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.milk('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.pig('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.stegosaurus('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.turkey('Hello!!!, what`s up!!!, Heard you wanna know about us.'), cowsay.turtle('Hello!!!, what`s up!!!, Heard you wanna know about us.')]
 
-# about_banner = ['cheese', 'daemon']
+about_banner = [cowsay.cheese, cowsay.daemon, cowsay.dragon, cowsay.kitty, cowsay.meow, cowsay.milk, cowsay.pig, cowsay.stegosaurus, cowsay.turkey, cowsay.turtle]
 
-# a = random.choice(about_banner)
+a = random.choice(about_banner)
 
-# print(a) 
-# print(cowsay.a("Hello!!!, what's up!!!, Heard you wanna know about us."))
+print(a('Hello!!!, what`s up!!!, Heard you wanna know about us.')) 
 
 def about_page():
     
