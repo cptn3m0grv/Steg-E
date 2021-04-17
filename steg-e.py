@@ -172,8 +172,6 @@ class Encryption(StegE):
             rem = self.level_of_encryption+"@"
             return salt+rem+ecr_msg+salt
 
-
-
 class Decryption(StegE):
     def __init__(self):
         super().__init__()
@@ -247,7 +245,9 @@ class Decryption(StegE):
                 return "Incorrect Key"
 
 if __name__ == '__main__':
-    if(args.choice=='encrypt'):
+    if(args.choice == 'about'):
+        pass
+    elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()
