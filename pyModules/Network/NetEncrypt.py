@@ -1,12 +1,18 @@
 import sys
+import itertools
+import threading
+import time
 import string
 import random
 import numpy as np
 from scapy.all import *
 from scapy.utils import PcapWriter
 from scapy.arch import windows
+import colorama
+from colorama import Fore, Style
+colorama.init(autoreset=True)
 
-def doTheJob(message, key, resultLoc):
+def Net_Encrypt(message, key, resultLoc):
     pktdump = PcapWriter(resultLoc, append=True, sync=True)
     
     key_list = []
@@ -19,7 +25,7 @@ def doTheJob(message, key, resultLoc):
 
     randWindow = randWindow*80
     key_list.insert(randIndex, randWindow)
-    #IllInois
+    
     for idx in range(0, len(key_list)):
         if(idx==randIndex):
             rawword = message
@@ -33,5 +39,3 @@ def doTheJob(message, key, resultLoc):
             pck = Ether()/IP(src="192.168.0.110", dst="192.168.0.111")/TCP(window=key_list[idx])/encr
 
         pktdump.write(pck)
-
-doTheJob("hullla hullare hulla hullaaaaaaa", "habibullaaaaaaaa", "./Final1.pcap")

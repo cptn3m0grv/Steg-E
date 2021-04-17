@@ -3,6 +3,8 @@ import getpass
 import os
 import sys
 import time
+import itertools
+import threading
 import math
 import random
 import re
@@ -15,7 +17,9 @@ from pyModules.Hard.HardDecrypt import hard_decrypt
 from pyModules.Intro.introScreen import key_graphics
 from pyModules.Intro.introScreen import lock
 from pyModules.Intro.introScreen import banner
-from temp.about import about_page
+from pyModules.Network.NetEncrypt import Net_Encrypt
+from pyModules.Network.NetDecrypt import Net_Decrypt
+# from temp.about import about_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
@@ -23,7 +27,7 @@ colorama.init(autoreset=True)
 parser = argparse.ArgumentParser(description="description")
 
 parser.add_argument('choice', help="encrpyt/decrypt/about/packetEncrypt/packetDecrypt")
-parser.add_argument('--carrier', help='Enter the location of source file (image (.jpg, .jpeg, .png ), pdf, network packets)')
+parser.add_argument('--carrier', help='Enter the location of source file (.jpg, .jpeg, .png, .pdf)')
 parser.add_argument('--data', help='Enter the location of message to hide.')
 parser.add_argument('--result', help='Enter the path to save output file.')
 
@@ -226,12 +230,25 @@ class Decryption(StegE):
 
         if(level_of_encryption == 1):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = input("Enter the password to Decrypt: ")
+            tulsi = getpass.getpass("Enter the password to Decrypt: ")
+            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
+            while(tulsi!=confirmedTulsi):
+                print("Your keys don't match buddy, enter them again!!!!")
+                tulsi = getpass.getpass("Enter the password to decrypt: ")
+                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
             return easyMethod_Decrypt(msg_to_decrypt, tulsi)
 
         elif(level_of_encryption == 2):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = input("Enter the password to Decrypt: ")
+            tulsi = getpass.getpass("Enter the password to Decrypt: ")
+            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
+            while(tulsi!=confirmedTulsi):
+                print("Your keys don't match buddy, enter them again!!!!")
+                tulsi = getpass.getpass("Enter the password to decrypt: ")
+                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
             try:
                 return MediumDecrypt_Method(msg_to_decrypt, tulsi)
             except:
@@ -239,7 +256,13 @@ class Decryption(StegE):
 
         elif(level_of_encryption == 3):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = input("Enter the password to Decrypt: ")
+            tulsi = getpass.getpass("Enter the password to Decrypt: ")
+            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
+            while(tulsi!=confirmedTulsi):
+                print("Your keys don't match buddy, enter them again!!!!")
+                tulsi = getpass.getpass("Enter the password to decrypt: ")
+                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
             try:
                 return hard_decrypt(msg_to_decrypt, tulsi)
             except:
@@ -247,19 +270,96 @@ class Decryption(StegE):
 
 class StegPack:
     def __init__(self):
+        self.src = args.carrier
+        self.msg = args.data
+        self.tgt = args.result
+
+    def calculations(self):
+        '''The child classes will be defining this method'''
         pass
+
 
 class PackEncrypt(StegPack):
     def __init__(self):
-        pass
+        super().__init__()
+        if(self.src != None):
+            print("You don't need to enter the carrier here, please refer help page!!!")
+            exit()
 
-class packetDecrypt(StegPack):
+        self.encr()
+
+    def encr(self):
+        tulsi = getpass.getpass("Enter the key: ")
+        confirmedTulsi = getpass.getpass("Confirm the key: ")
+
+        while(tulsi!=confirmedTulsi):
+            print("Your keys don't match buddy, enter them again!!!!")
+            tulsi = getpass.getpass("Enter the key: ")
+            confirmedTulsi = getpass.getpass("Confirm the key: ")
+
+        self.calculations(tulsi)
+
+    def calculations(self, tulsi):
+        try:
+            with open(self.msg, "r") as coco:
+                cocoa = coco.read()
+        except:
+            print(Fore.RED+"Unable to read message file!!!")
+            exit()
+
+        encr_cocoa = easyMethod_Rotate(cocoa, tulsi)
+        flag = False
+        def animate():
+            for symbol in itertools.cycle([Fore.CYAN+"⢿", Fore.CYAN+"⣻", Fore.CYAN+"⣽", Fore.CYAN+"⣾", Fore.CYAN+"⣷", Fore.CYAN+"⣯", Fore.CYAN+"⣟", Fore.CYAN+"⡿"]):
+                if flag:
+                    break
+                sys.stdout.write(Fore.CYAN+'\rEncrypting..... ' + symbol + '     ')
+                sys.stdout.flush()
+                time.sleep(0.2)
+            sys.stdout.write(Fore.GREEN+'\rEncrypted!!!     ')
+
+        t = threading.Thread(target=animate)
+        t.start()
+        Net_Encrypt(encr_cocoa, tulsi, self.tgt)
+        flag = True
+
+               
+
+class PackDecrypt(StegPack):
     def __init__(self):
-        pass
+        super().__init__()
+        if(self.src != None or self.msg != None):
+            print("You only need to mention the network file here, refer to the help page.")
+            exit()
+        
+        self.decr()
+    
+    def decr(self):
+        tulsi = getpass.getpass("Enter the key: ")
+        confirmedTulsi = getpass.getpass("Confirm the key: ")
+
+        while(tulsi!=confirmedTulsi):
+            print("Your keys don't match buddy, enter them again!!!!")
+            tulsi = getpass.getpass("Enter the key: ")
+            confirmedTulsi = getpass.getpass("Confirm the key: ")
+
+        encr_msg = self.calculations(tulsi)
+        decr_msg = easyMethod_Decrypt(encr_msg, tulsi)
+        print("\nYour message here:\n")
+        print(decr_msg)
+
+    def calculations(self, tulsi):        
+        ecr_msf_from_packet = Net_Decrypt(tulsi, self.tgt)
+        if(ecr_msf_from_packet == "Enter the right key!!!!"):
+            print("\nEnter the right key!!!")
+            exit()
+
+        return ecr_msf_from_packet
 
 if __name__ == '__main__':
     if(args.choice=='about'):
-        about_page() 
+        # about_page() 
+        pass
     elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
