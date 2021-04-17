@@ -14,6 +14,5 @@ for val in rawkey[:-1]:
 
 key_char=''.join(chr(i) for i in key)
 print(key_char)
-print(readpack[-1]['Raw'].load)
-
-
+print(readpack[-1]['Raw'].load.decode('utf-8'))
+print(readpack[-1].show())

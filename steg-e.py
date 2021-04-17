@@ -22,7 +22,7 @@ colorama.init(autoreset=True)
 
 parser = argparse.ArgumentParser(description="description")
 
-parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
+parser.add_argument('choice', help="encrpyt/decrypt/about/packetEncrypt/packetDecrypt")
 parser.add_argument('--carrier', help='Enter the location of source file (image (.jpg, .jpeg, .png ), pdf, network packets)')
 parser.add_argument('--data', help='Enter the location of message to hide.')
 parser.add_argument('--result', help='Enter the path to save output file.')
@@ -245,18 +245,29 @@ class Decryption(StegE):
             except:
                 return "Incorrect Key"
 
-if __name__ == '__main__':
-<<<<<<< HEAD
-    if(args.choice == 'about'):
+class StegPack:
+    def __init__(self):
         pass
-=======
+
+class PackEncrypt(StegPack):
+    def __init__(self):
+        pass
+
+class packetDecrypt(StegPack):
+    def __init__(self):
+        pass
+
+if __name__ == '__main__':
     if(args.choice=='about'):
         about_page() 
->>>>>>> 830e96aa10d33e808a23e9721de7a045f9810c32
     elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()
+    elif(args.choice=='packetEncrypt'):
+        obj = PackEncrypt()
+    elif(args.choice=='packetDecrypt'):
+        obj = PackDecrypt()
     else:
         print(Fore.RED+"Wrong Arguments!!!")
         exit()
