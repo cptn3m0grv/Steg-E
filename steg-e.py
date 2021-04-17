@@ -15,6 +15,7 @@ from pyModules.Hard.HardDecrypt import hard_decrypt
 from pyModules.Intro.introScreen import key_graphics
 from pyModules.Intro.introScreen import lock
 from pyModules.Intro.introScreen import banner
+from temp.about import about_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
@@ -22,7 +23,7 @@ colorama.init(autoreset=True)
 parser = argparse.ArgumentParser(description="description")
 
 parser.add_argument('choice', help="Enter encrypt or decrypt here!!!")
-parser.add_argument('--carrier', help='Enter the location of source file (image, pdf, network packets)')
+parser.add_argument('--carrier', help='Enter the location of source file (image (.jpg, .jpeg, .png ), pdf, network packets)')
 parser.add_argument('--data', help='Enter the location of message to hide.')
 parser.add_argument('--result', help='Enter the path to save output file.')
 
@@ -247,7 +248,9 @@ class Decryption(StegE):
                 return "Incorrect Key"
 
 if __name__ == '__main__':
-    if(args.choice=='encrypt'):
+    if(args.choice=='about'):
+        about_page() 
+    elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
         obj = Decryption()

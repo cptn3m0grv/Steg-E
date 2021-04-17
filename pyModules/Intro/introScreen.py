@@ -62,3 +62,6 @@ def banner():
     print(Fore.MAGENTA+"╚════██║   ██║   ██╔══╝  ██║   ██║    ╚════╝    ██╔══╝  ".center(150))
     print(Fore.MAGENTA+"███████║   ██║   ███████╗╚██████╔╝              ███████╗".center(150))
     print(Fore.MAGENTA+"╚══════╝   ╚═╝   ╚══════╝ ╚═════╝               ╚══════╝".center(150))
+    print(Fore.BLUE+Style.BRIGHT+"                                                  Tool By: -".center(150))
+    print(Fore.BLUE+Style.BRIGHT+"                                                                                    ashchaubey, cptn3m0grv,".center(150))
+    print(Fore.BLUE+Style.BRIGHT+"                                                                                    Dracula62,  Stalwart-GS".center(150))
