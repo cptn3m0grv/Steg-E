@@ -26,14 +26,14 @@ colorama.init(autoreset=True)
 
 parser = argparse.ArgumentParser(description="description")
 
-parser.add_argument('choice', help="encrpyt/decrypt/about/packetEncrypt/packetDecrypt")
+parser.add_argument('choice', help='''encrpyt\ndecrypt\nabout\npacketEncrypt\npacketDecrypt''')
 parser.add_argument('--carrier', help='Enter the location of source file (.jpg, .jpeg, .png, .pdf)')
 parser.add_argument('--data', help='Enter the location of message to hide.')
 parser.add_argument('--result', help='Enter the path to save output file.')
 
 args = parser.parse_args()
 
-################################################ CLASSES #########################################################✔
+################################################ CLASSES ######################################################✔
 
 class StegE:
     
@@ -229,11 +229,6 @@ class Decryption(StegE):
 
         try:
             encrypted_source_msg_temp = re.findall(r"\$3%`\/[123]@.*\$3%`\/".encode('utf-8'), encrypted_source_msg)
-            # encrypted_source_msg_level_3 = re.findall(r"\$3\|\\\|!\)\|\\\|U!\)3\$@3@.*\$3\|\\\|!\)\|\\\|U!\)3\$".encode('utf-8'), encrypted_source_msg)
-
-            # if(len(encrypted_source_msg_level_3)>0):
-            #     level_of_encryption = int(encrypted_source_msg_level_3[0].decode('utf-8')[16])
-            # else:
             level_of_encryption = int(encrypted_source_msg_temp[0].decode('utf-8')[5])
         except:
             print(Fore.RED+Style.BRIGHT+"The file has no encrypted message hidden.")

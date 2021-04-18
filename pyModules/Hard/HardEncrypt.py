@@ -1,6 +1,5 @@
 import numpy as np
 import datetime
-# from customDict import ourDict
 
 ourDict = {
     "a": "ஓ",
