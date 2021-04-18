@@ -19,7 +19,7 @@ from pyModules.Intro.introScreen import lock
 from pyModules.Intro.introScreen import banner
 from pyModules.Network.NetEncrypt import Net_Encrypt
 from pyModules.Network.NetDecrypt import Net_Decrypt
-from temp.about import about_page
+from pyModules.Intro.about import about_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
