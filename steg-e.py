@@ -19,7 +19,7 @@ from pyModules.Intro.introScreen import lock
 from pyModules.Intro.introScreen import banner
 from pyModules.Network.NetEncrypt import Net_Encrypt
 from pyModules.Network.NetDecrypt import Net_Decrypt
-# from temp.about import about_page
+from temp.about import about_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
@@ -207,6 +207,17 @@ class Decryption(StegE):
 
         print("\nMessage here:\n"+Fore.CYAN+message_to_display)
 
+    def keyInput(self):
+        tempTulsi = getpass.getpass("Enter the password to Decrypt: ")
+        confirmedTempTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
+        while(tempTulsi!=confirmedTempTulsi):
+            print("Your keys don't match buddy, enter them again!!!!")
+            tempTulsi = getpass.getpass("Enter the password to decrypt: ")
+            confirmedTempTulsi = getpass.getpass("Confirm the password to decrypt: ")
+
+        return tempTulsi
+
     def calculations(self):
         try:
             with open(self.tgt, "rb") as file:
@@ -230,25 +241,12 @@ class Decryption(StegE):
 
         if(level_of_encryption == 1):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = getpass.getpass("Enter the password to Decrypt: ")
-            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
-
-            while(tulsi!=confirmedTulsi):
-                print("Your keys don't match buddy, enter them again!!!!")
-                tulsi = getpass.getpass("Enter the password to decrypt: ")
-                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
-
+            tulsi = self.keyInput()
             return easyMethod_Decrypt(msg_to_decrypt, tulsi)
 
         elif(level_of_encryption == 2):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = getpass.getpass("Enter the password to Decrypt: ")
-            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
-
-            while(tulsi!=confirmedTulsi):
-                print("Your keys don't match buddy, enter them again!!!!")
-                tulsi = getpass.getpass("Enter the password to decrypt: ")
-                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+            tulsi = self.keyInput()
             try:
                 return MediumDecrypt_Method(msg_to_decrypt, tulsi)
             except:
@@ -256,13 +254,7 @@ class Decryption(StegE):
 
         elif(level_of_encryption == 3):
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
-            tulsi = getpass.getpass("Enter the password to Decrypt: ")
-            confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
-
-            while(tulsi!=confirmedTulsi):
-                print("Your keys don't match buddy, enter them again!!!!")
-                tulsi = getpass.getpass("Enter the password to decrypt: ")
-                confirmedTulsi = getpass.getpass("Confirm the password to decrypt: ")
+            tulsi = self.keyInput()
             try:
                 return hard_decrypt(msg_to_decrypt, tulsi)
             except:
@@ -358,8 +350,8 @@ class PackDecrypt(StegPack):
 
 if __name__ == '__main__':
     if(args.choice=='about'):
-        # about_page() 
-        pass
+        about_page() 
+        #pass
     elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
