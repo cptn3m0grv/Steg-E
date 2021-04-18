@@ -215,6 +215,57 @@ def string_to_list(string):
     char_to_int = list(map(lambda x:vocab[x], char_list))
     return char_to_int
 
+def rotateTimeStamp(eachChar, eachRotateTime):
+    temp = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]'
+    temp = temp + "{"
+    temp = temp + '}/|;:,.<>?~ '
+    temp = temp + "'"
+    temp = temp + '"'
+
+    idx_to_rotate = -1
+
+    for i in range(0, len(temp)):
+        if(temp[i]==eachChar):
+            idx_to_rotate = i
+            break
+
+    if(idx_to_rotate + eachRotateTime >= len(temp)):
+        rotatedChar = temp[idx_to_rotate + eachRotateTime - len(temp)]
+        return rotatedChar
+
+    return temp[idx_to_rotate + eachRotateTime]
+
+def applyTimeStamp(textToEncryptTrim, timeStampStr):
+    encrL = ""
+    for i in range(0, len(textToEncryptTrim)):
+        encrL = encrL + rotateTimeStamp(textToEncryptTrim[i], int(timeStampStr[i]))
+    
+    return encrL
+
+def timeRotate(textToEncrypt):
+    year = datetime.datetime.now().year
+    month = datetime.datetime.now().month
+    date = datetime.datetime.now().day
+    hour = datetime.datetime.now().hour
+    minute = datetime.datetime.now().minute
+    seconds = datetime.datetime.now().second
+
+    timeStamp = str(year)+str(month)+str(date)+str(hour)+str(minute)+str(seconds)
+
+    final = ""
+    j = 0
+    for i in range(0, len(textToEncrypt)//len(timeStamp)):
+        final = final + applyTimeStamp(textToEncrypt[j:j+len(timeStamp)], timeStamp)
+        j = j + len(timeStamp)
+
+    rem = len(textToEncrypt)%len(timeStamp)
+    if(rem>0):
+        rem_str = textToEncrypt[-1*(rem):]
+        trimmed_timeStamp = timeStamp[0:rem]
+        final = final + applyTimeStamp(rem_str, trimmed_timeStamp)
+
+    return final, timeStamp
+
 def hard_encrypt(message, key):
     message_noNextLine = ""
 
@@ -227,18 +278,16 @@ def hard_encrypt(message, key):
     msg_part1, msg_part2 = splitMessage(message_noNextLine)
     key_part1, key_part2 = splitMessage(key)
 
-    # print(key_part1)
-    # print(key_part2)
-
     encrpyted_part1 = easyMethod_Rotate(msg_part1, key_part1)
     encrpyted_part2 = MediumEncrpyt_Method(msg_part2, key_part2)
 
-    #HARD ENCRYPTION 
-
-    encrpyted_part1  = encrpyted_part1 # koi bhi func
-    encrpyted_part2 = encrpyted_part2 #koi bhi func
-
-    #HARD ENCRYPTION ENDS
+    len_easy = len(encrpyted_part1)
+    len_med = len(encrpyted_part2)
+    concatParts = encrpyted_part1 + encrpyted_part2
+    
+    time_encr, currTime = timeRotate(concatParts)
+    encrpyted_part1 = time_encr[0:len_easy]
+    encrpyted_part2 = time_encr[len_easy:]
 
     encrpyted_message = ""
 
@@ -251,6 +300,14 @@ def hard_encrypt(message, key):
     encrpyted_message = encrpyted_message + "Z"
 
     for ch in encrpyted_part2:
+        if(isValid(ch)):
+            encrpyted_message = encrpyted_message + ourDict[ch]
+        else:
+            encrpyted_message = encrpyted_message + ch
+
+    encrpyted_message = encrpyted_message + "Z"
+
+    for ch in currTime:
         if(isValid(ch)):
             encrpyted_message = encrpyted_message + ourDict[ch]
         else:

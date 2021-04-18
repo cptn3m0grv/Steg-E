@@ -350,8 +350,7 @@ class PackDecrypt(StegPack):
 
 if __name__ == '__main__':
     if(args.choice=='about'):
-        about_page() 
-        #pass
+        about_page()
     elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):

@@ -176,10 +176,9 @@ def easyMethod_Decrypt(message, tulsi):
 
 def MediumDecrypt_Method(en_message, key):
     en_list = tw.wrap(en_message, 4)
-    # print(en_list)
     random_seed = set_random_seed(key)
     rotateBy = random_seed.randint(0, 9900, len(en_list))
-    en_list = np.array(en_list, dtype=np.int)
+    en_list = np.array(en_list, dtype=int)
     decrpyted_list = en_list - rotateBy
     vocab = dict()
     temp = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ! @ # $ % ^ & * ( ) - _ = + [ ] { } / | ; : , . < > ? ~'
@@ -206,6 +205,44 @@ def set_random_seed(key):
     random_seed = np.random.RandomState(int(seed_tobe_set)%((2**32)-2))
     return random_seed   
 
+def reverseRotateTimeStamp(eachChar, eachRotateTime):
+    temp = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]'
+    temp = temp + "{"
+    temp = temp + '}/|;:,.<>?~ '
+    temp = temp + "'"
+    temp = temp + '"'
+
+    idx_to_rotate = 12321321321321
+
+    for i in range(0, len(temp)):
+        if(temp[i]==eachChar):
+            idx_to_rotate = i
+            break
+
+    return temp[idx_to_rotate - eachRotateTime]
+
+def applyTimeStamp(somethingToDecryptTrim, timestampTrim):
+    encrL = ""
+    for i in range(0, len(somethingToDecryptTrim)):
+        encrL = encrL + reverseRotateTimeStamp(somethingToDecryptTrim[i], int(timestampTrim[i]))
+    
+    return encrL
+
+def reverseTimeStamp(somethingToDecrypt, timestamp):
+    final = ""
+    j = 0
+    for i in range(0, len(somethingToDecrypt)//len(timestamp)):
+        final = final + applyTimeStamp(somethingToDecrypt[j:j+len(timestamp)], timestamp)
+        j = j + len(timestamp)
+
+    rem = len(somethingToDecrypt)%len(timestamp)
+    if(rem>0):
+        rem_str = somethingToDecrypt[-1*(rem):]
+        trimmed_timeStamp = timestamp[0:rem]
+        final = final + applyTimeStamp(rem_str, trimmed_timeStamp)
+
+    return final
+
 def hard_decrypt(message, key1):
 
     customDecryptDict = dict()
@@ -215,7 +252,10 @@ def hard_decrypt(message, key1):
 
     cl = list(customDecryptDict.keys())
 
-    part1, part2 = message.split("Z")
+    part1, part2, timeStamp = message.split("Z")
+    easy_len = len(part1)
+    med_len = len(part2)
+
     key_part1, key_part2 = splitMessage(key1)
 
     actual_message = ""
@@ -226,17 +266,25 @@ def hard_decrypt(message, key1):
         else:
             actual_message = actual_message + ch
 
-    decrypted_part1 = easyMethod_Decrypt(actual_message, key_part1)
-    
-    actual_message = ""
     for ch in part2:
         if(ch in cl):
             actual_message = actual_message + customDecryptDict[ch]
         else:
             actual_message = actual_message + ch
 
-    decrypted_part2 = MediumDecrypt_Method(actual_message, key_part2)
+    timestamp = ""
+
+    for ch in timeStamp:
+        if(ch in cl):
+            timestamp = timestamp + customDecryptDict[ch]
+        else:
+            timestamp = timestamp + ch
     
+    toDecrypt = reverseTimeStamp(actual_message, timestamp)
+
+    decrypted_part1 = easyMethod_Decrypt(toDecrypt[0:easy_len], key_part1)
+    decrypted_part2 = MediumDecrypt_Method(toDecrypt[easy_len:], key_part2)
+
     decrypted_part1 = decrypted_part1.replace("`", "\n")
     decrypted_part2 = decrypted_part2.replace("`", "\n")
 
