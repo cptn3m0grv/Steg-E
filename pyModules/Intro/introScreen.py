@@ -4,6 +4,8 @@ colorama.init(autoreset=True)
 import time
 
 
+
+
 def key_graphics(width):
     print(Style.BRIGHT+Fore.GREEN+"                                     ________     ".center(width))
     time.sleep(0.07)
