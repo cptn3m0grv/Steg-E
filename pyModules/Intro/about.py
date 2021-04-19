@@ -16,9 +16,9 @@ def about_page():
 
     print(Fore.RED+Style.BRIGHT+"About Tool:\n") 
     print(Fore.CYAN+Style.BRIGHT+"What is STEG-E?\n")
-    print(Fore.GREEN+"STEG-E is a tool developed to perform the task of stegnography (i.e., hiding any crucial information under a base file). .It is developed using python.\n")
+    print(Fore.GREEN+"STEG-E is a tool specifically designed to perform the task of stegnography (i.e., hiding any crucial information under a base file). It is developed using python with addition of some essential features from object-oriented programming.\n")
     print(Fore.CYAN+Style.BRIGHT+"Many tools perform steganography, so what makes our tool different?\n")
-    print(Fore.GREEN+"We formulate our algorithms to encode and decode the message to be hidden, with applied custom encryption algorithms on the message for its encryption and decryption. Using different levels of security, users can select different encryption algorithms to be applied to the message before hiding it. The process of hiding the message can be performed over images(.png, .jpg, .jpeg), .pdf and network packets.\n\n")
+    print(Fore.GREEN+"We formulate our algorithms to encode and decode the message to be hidden, with applied custom encryption algorithms on the message for its encryption and decryption. Using different levels of security, users can select different degree of encryption algorithms to be applied to the message before hiding it. The process of hiding the message can be performed over images(.png, .jpg, .jpeg), .pdf and network packets.\n\n")
     print(Fore.BLUE+Style.BRIGHT+"About Us:\n")
     print(Fore.MAGENTA+"Ashish Chaubey\n")
     print(Fore.YELLOW+Style.BRIGHT+"\tLinkedIn: https://www.linkedin.com/in/hackpandit/")
