@@ -221,6 +221,9 @@ def rotateTimeStamp(eachChar, eachRotateTime):
     temp = temp + "'"
     temp = temp + '"'
 
+    if(eachChar == '`'):
+        return '`'
+
     idx_to_rotate = -1
 
     for i in range(0, len(temp)):

@@ -212,6 +212,9 @@ def reverseRotateTimeStamp(eachChar, eachRotateTime):
     temp = temp + "'"
     temp = temp + '"'
 
+    if eachChar == '`':
+        return '`'
+
     idx_to_rotate = 12321321321321
 
     for i in range(0, len(temp)):
