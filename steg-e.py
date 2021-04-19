@@ -228,30 +228,50 @@ class Decryption(StegE):
             exit()
 
         try:
+            time1 = time.time()
             encrypted_source_msg_temp = re.findall(r"\$3%`\/[123]@.*\$3%`\/".encode('utf-8'), encrypted_source_msg)
             level_of_encryption = int(encrypted_source_msg_temp[0].decode('utf-8')[5])
+            time1 = time.time()-time1
         except:
             print(Fore.RED+Style.BRIGHT+"The file has no encrypted message hidden.")
             exit()
 
         if(level_of_encryption == 1):
+            time2 = time.time()
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            time2 = time.time()-time2
             tulsi = self.keyInput()
-            return easyMethod_Decrypt(msg_to_decrypt, tulsi)
+            time3 = time.time()
+            to_return = easyMethod_Decrypt(msg_to_decrypt, tulsi)
+            time3 = time.time()-time3
+            print("\n"+Fore.GREEN+"Time taken: {} s".format(time1+time2+time3))
+            return to_return
 
         elif(level_of_encryption == 2):
+            time2 = time.time()
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            time2 = time.time()-time2
             tulsi = self.keyInput()
+            time3 = time.time()
             try:
-                return MediumDecrypt_Method(msg_to_decrypt, tulsi)
+                to_return = MediumDecrypt_Method(msg_to_decrypt, tulsi)
+                time3 = time.time()-time3
+                print("\n"+Fore.GREEN+"Time taken: {} s".format(time1+time2+time3))
+                return to_return
             except:
                 return "Incorrect Key"
 
         elif(level_of_encryption == 3):
+            time2 = time.time()
             msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            time2 = time.time()-time2
             tulsi = self.keyInput()
+            time3 = time.time()
             try:
-                return hard_decrypt(msg_to_decrypt, tulsi)
+                to_return = hard_decrypt(msg_to_decrypt, tulsi)
+                time3 = time.time()-time3
+                print("\n"+Fore.GREEN+"Time taken: {} s".format(time1+time2+time3))
+                return to_return
             except:
                 return "Incorrect Key"
 
@@ -283,7 +303,6 @@ class PackEncrypt(StegPack):
             print("Your keys don't match buddy, enter them again!!!!")
             tulsi = getpass.getpass("Enter the key: ")
             confirmedTulsi = getpass.getpass("Confirm the key: ")
-
         self.calculations(tulsi)
 
     def calculations(self, tulsi):
@@ -294,7 +313,9 @@ class PackEncrypt(StegPack):
             print(Fore.RED+"Unable to read message file!!!")
             exit()
 
+        time1 = time.time()
         encr_cocoa = easyMethod_Rotate(cocoa, tulsi)
+        time1 = time.time()-time1
         flag = False
         def animate():
             for symbol in itertools.cycle([Fore.CYAN+"⢿", Fore.CYAN+"⣻", Fore.CYAN+"⣽", Fore.CYAN+"⣾", Fore.CYAN+"⣷", Fore.CYAN+"⣯", Fore.CYAN+"⣟", Fore.CYAN+"⡿"]):
@@ -307,8 +328,11 @@ class PackEncrypt(StegPack):
 
         t = threading.Thread(target=animate)
         t.start()
+        time2 = time.time()
         Net_Encrypt(encr_cocoa, tulsi, self.tgt)
+        time2 = time.time()-time2
         flag = True
+        print("\n"+Fore.YELLOW+"Time taken: {} s".format(time1+time2))
 
                
 
@@ -330,8 +354,11 @@ class PackDecrypt(StegPack):
             tulsi = getpass.getpass("Enter the key: ")
             confirmedTulsi = getpass.getpass("Confirm the key: ")
 
+        time1 = time.time()
         encr_msg = self.calculations(tulsi)
         decr_msg = easyMethod_Decrypt(encr_msg, tulsi)
+        time1 = time.time()-time1
+        print("\n"+Fore.GREEN+"Time Taken: {} s".format(time1))
         print("\nYour message here:\n")
         print(decr_msg)
 
