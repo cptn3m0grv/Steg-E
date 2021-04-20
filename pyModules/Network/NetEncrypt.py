@@ -7,7 +7,6 @@ import random
 import numpy as np
 from scapy.all import *
 from scapy.utils import PcapWriter
-from scapy.arch import windows
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
