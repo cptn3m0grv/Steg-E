@@ -1,4 +1,4 @@
-#BETA IMAGE
+#ALPHA IMAGE
 FROM centos:latest
 
 #We can also comment this step, once the repo is public
