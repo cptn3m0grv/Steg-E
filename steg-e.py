@@ -16,6 +16,8 @@ from pyModules.Hard.HardEncrypt import hard_encrypt
 from pyModules.Hard.HardDecrypt import hard_decrypt
 from pyModules.Intro.introScreen import key_graphics
 from pyModules.Intro.introScreen import lock
+from pyModules.Intro.introScreen import packtEncrypt_graphics
+from pyModules.Intro.introScreen import packtDecrypt_graphics
 from pyModules.Intro.introScreen import banner
 from pyModules.Network.NetEncrypt import Net_Encrypt
 from pyModules.Network.NetDecrypt import Net_Decrypt
@@ -378,8 +380,10 @@ if __name__ == '__main__':
     elif(args.choice=='decrypt'):
         obj = Decryption()
     elif(args.choice=='packetEncrypt'):
+        packtEncrypt_graphics()
         obj = PackEncrypt()
     elif(args.choice=='packetDecrypt'):
+        packtDecrypt_graphics()
         obj = PackDecrypt()
     else:
         print(Fore.RED+"Wrong Arguments!!!")
