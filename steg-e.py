@@ -91,6 +91,21 @@ class Encryption(StegE):
         super().__init__()
         if(self.src != None and self.msg != None):
             self.first_page()
+            
+            try:
+                with open(self.src, 'rb') as file:
+                    pass
+            except:
+                print(Fore.RED+"Carrier File is Invalid!!!\n")
+                exit()
+
+            try:
+                with open(self.msg, 'rb') as file:
+                    pass
+            except:
+                print(Fore.RED+"Message file in invalid!!!\n")
+                exit()
+                
             self.encrypt_here()
         else:
             print(Style.BRIGHT+Fore.RED+"Wrong Arguments!!!")
@@ -190,6 +205,12 @@ class Decryption(StegE):
             print()
             print()
             key_graphics(150)
+            try:
+                with open(self.tgt, 'rb') as file:
+                    pass
+            except:
+                print(Fore.RED+"File does not exits, please enter a valid file!!!") 
+                exit()
             self.decrypt_here()
 
     def decrypt_here(self):
@@ -282,6 +303,7 @@ class StegPack:
         self.src = args.carrier
         self.msg = args.data
         self.tgt = args.result
+        banner()
 
     def calculations(self):
         '''The child classes will be defining this method'''
@@ -289,8 +311,9 @@ class StegPack:
 
 
 class PackEncrypt(StegPack):
-    def __init__(self):
+    def __init__(self):        
         super().__init__()
+        packtEncrypt_graphics()
         if(self.src != None):
             print("You don't need to enter the carrier here, please refer help page!!!")
             exit()
@@ -308,13 +331,23 @@ class PackEncrypt(StegPack):
         self.encr()
 
     def encr(self):
-        tulsi = getpass.getpass("Enter the key: ")
-        confirmedTulsi = getpass.getpass("Confirm the key: ")
+        try:
+            tulsi = getpass.getpass("Enter the key: ")
+            confirmedTulsi = getpass.getpass("Confirm the key: ")
+        except:
+            print("^C")
+            print(Fore.RED+"Terminating program!!!")
+            exit()
 
         while(tulsi!=confirmedTulsi):
             print("Your keys don't match buddy, enter them again!!!!")
-            tulsi = getpass.getpass("Enter the key: ")
-            confirmedTulsi = getpass.getpass("Confirm the key: ")
+            try:
+                tulsi = getpass.getpass("Enter the key: ")
+                confirmedTulsi = getpass.getpass("Confirm the key: ")
+            except:
+                print("^C")
+                print(Fore.RED+"Terminating program!!!")
+                exit()
         self.calculations(tulsi)
 
     def calculations(self, tulsi):
@@ -354,6 +387,7 @@ class PackEncrypt(StegPack):
 class PackDecrypt(StegPack):
     def __init__(self):
         super().__init__()
+        packtDecrypt_graphics()
         if(self.src != None or self.msg != None):
             print("You only need to mention the network file here, refer to the help page.")
             exit()
@@ -365,9 +399,9 @@ class PackDecrypt(StegPack):
         isValid = len(re.findall(r'.*\.pcap', self.tgt))
 
         if(not isValid):
-            print(Fore.RED+"The file to decrypt must be a network file with '.pcap' extension!!!")
+            print(Fore.RED+"The file to decrypt must be a network file with '.pcap' extension!!!\n")
             print(Fore.GREEN+"Quick Tip: ")
-            print(Fore.CYAN+"If you are sure that the network file is valid, then try adding '.pcap' extension at the end of file name.")
+            print(Fore.CYAN+"If you are sure that the network file is valid, then try adding '.pcap' extension at the end of file name.\n")
             exit()
 
         try:
@@ -426,10 +460,8 @@ if __name__ == '__main__':
     elif(args.choice=='decrypt'):
         obj = Decryption()
     elif(args.choice=='packetEncrypt'):
-        packtEncrypt_graphics()
         obj = PackEncrypt()
     elif(args.choice=='packetDecrypt'):
-        packtDecrypt_graphics()
         obj = PackDecrypt()
     else:
         print(Fore.RED+"Wrong Arguments!!!")
