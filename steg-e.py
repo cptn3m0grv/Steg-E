@@ -294,6 +294,16 @@ class PackEncrypt(StegPack):
         if(self.src != None):
             print("You don't need to enter the carrier here, please refer help page!!!")
             exit()
+        
+        if(self.msg == None or self.tgt == None):
+            print(Fore.RED+"Invalid Agruments\nPlease refer help section.")
+            exit()
+
+        isValid = len(re.findall(r'.*\.pcap', self.tgt))
+
+        if(not isValid):
+            print(Fore.RED+"Saving result with '.pcap' is mandatory!!!")
+            exit()        
 
         self.encr()
 
@@ -326,7 +336,9 @@ class PackEncrypt(StegPack):
                 sys.stdout.write(Fore.CYAN+'\rEncrypting..... ' + symbol + '     ')
                 sys.stdout.flush()
                 time.sleep(0.2)
+                sys.stdout.flush()
             sys.stdout.write(Fore.GREEN+'\rEncrypted!!!     ')
+            flag2 = True
 
         t = threading.Thread(target=animate)
         t.start()
@@ -334,6 +346,7 @@ class PackEncrypt(StegPack):
         Net_Encrypt(encr_cocoa, tulsi, self.tgt)
         time2 = time.time()-time2
         flag = True
+        time.sleep(0.5)
         print("\n"+Fore.YELLOW+"Time taken: {} s".format(time1+time2))
 
                
@@ -344,17 +357,46 @@ class PackDecrypt(StegPack):
         if(self.src != None or self.msg != None):
             print("You only need to mention the network file here, refer to the help page.")
             exit()
+
+        if(self.tgt == None):
+            print(Fore.RED+"Invalid arguments!!\nRefer Help.")
+            exit()
+
+        isValid = len(re.findall(r'.*\.pcap', self.tgt))
+
+        if(not isValid):
+            print(Fore.RED+"The file to decrypt must be a network file with '.pcap' extension!!!")
+            print(Fore.GREEN+"Quick Tip: ")
+            print(Fore.CYAN+"If you are sure that the network file is valid, then try adding '.pcap' extension at the end of file name.")
+            exit()
+
+        try:
+            with open(self.tgt, 'rb') as file:
+                pass
+        except:
+            print(Fore.RED+"File does not exits, please enter a valid file!!!") 
+            exit()
         
         self.decr()
     
     def decr(self):
-        tulsi = getpass.getpass("Enter the key: ")
-        confirmedTulsi = getpass.getpass("Confirm the key: ")
+        try:
+            tulsi = getpass.getpass("Enter the key: ")
+            confirmedTulsi = getpass.getpass("Confirm the key: ")
+        except:
+            print("^C")
+            print(Fore.RED+"Terminating program!!!")
+            exit()
 
         while(tulsi!=confirmedTulsi):
             print("Your keys don't match buddy, enter them again!!!!")
-            tulsi = getpass.getpass("Enter the key: ")
-            confirmedTulsi = getpass.getpass("Confirm the key: ")
+            try:
+                tulsi = getpass.getpass("Enter the key: ")
+                confirmedTulsi = getpass.getpass("Confirm the key: ")
+            except:
+                print("^C")
+                print(Fore.RED+"Terminating program!!!")
+                exit()
 
         time1 = time.time()
         encr_msg = self.calculations(tulsi)
@@ -365,7 +407,11 @@ class PackDecrypt(StegPack):
         print(decr_msg)
 
     def calculations(self, tulsi):        
-        ecr_msf_from_packet = Net_Decrypt(tulsi, self.tgt)
+        try:
+            ecr_msf_from_packet = Net_Decrypt(tulsi, self.tgt)
+        except:
+            print(Fore.RED+"The network file is either corrupted or invalid!!!")
+            exit()
         if(ecr_msf_from_packet == "Enter the right key!!!!"):
             print("\nEnter the right key!!!")
             exit()
