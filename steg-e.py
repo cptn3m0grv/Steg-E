@@ -8,20 +8,36 @@ import threading
 import math
 import random
 import re
-from pyModules.Easy.EasyEncrypt import easyMethod_Rotate
-from pyModules.Easy.EasyDecrypt import easyMethod_Decrypt
-from pyModules.Medium.MediumEncrypt import MediumEncrpyt_Method
-from pyModules.Medium.MediumDecrypt import MediumDecrypt_Method
-from pyModules.Hard.HardEncrypt import hard_encrypt
-from pyModules.Hard.HardDecrypt import hard_decrypt
-from pyModules.Intro.introScreen import key_graphics
-from pyModules.Intro.introScreen import lock
-from pyModules.Intro.introScreen import packtEncrypt_graphics
-from pyModules.Intro.introScreen import packtDecrypt_graphics
-from pyModules.Intro.introScreen import banner
-from pyModules.Network.NetEncrypt import Net_Encrypt
-from pyModules.Network.NetDecrypt import Net_Decrypt
-from pyModules.Intro.about import about_page
+import platform
+
+if("Windows" in platform.platform()):
+    sys.path.append(os.getcwd()+"\\pyModules\\Easy")
+    sys.path.append(os.getcwd()+"\\pyModules\\Medium")
+    sys.path.append(os.getcwd()+"\\pyModules\\Hard")
+    sys.path.append(os.getcwd()+"\\pyModules\\Intro")
+    sys.path.append(os.getcwd()+"\\pyModules\\Network")
+else:
+    sys.path.append(os.getcwd()+"/pyModules/Easy")
+    sys.path.append(os.getcwd()+"/pyModules/Medium")
+    sys.path.append(os.getcwd()+"/pyModules/Hard")
+    sys.path.append(os.getcwd()+"/pyModules/Intro")
+    sys.path.append(os.getcwd()+"/pyModules/Network")
+
+
+from EasyEncrypt import easyMethod_Rotate
+from EasyDecrypt import easyMethod_Decrypt
+from MediumEncrypt import MediumEncrpyt_Method
+from MediumDecrypt import MediumDecrypt_Method
+from HardEncrypt import hard_encrypt
+from HardDecrypt import hard_decrypt
+from introScreen import key_graphics
+from introScreen import lock
+from introScreen import packtEncrypt_graphics
+from introScreen import packtDecrypt_graphics
+from introScreen import banner
+from NetEncrypt import Net_Encrypt
+from NetDecrypt import Net_Decrypt
+from about import about_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)

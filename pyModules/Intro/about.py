@@ -7,7 +7,7 @@ colorama.init(autoreset=True)
 
 def about_page():
 
-    about_banner = [cowsay.cheese, cowsay.daemon, cowsay.dragon, cowsay.kitty, cowsay.meow, cowsay.milk, cowsay.pig, cowsay.stegosaurus, cowsay.turtle, 'b']
+    about_banner = [cowsay.cheese, cowsay.daemon, cowsay.dragon, cowsay.kitty, cowsay.meow, cowsay.milk, cowsay.pig, cowsay.stegosaurus, cowsay.turtle, cowsay.trex, 'b']
     a = random.choice(about_banner)
     if(a == 'b'):
         man()
