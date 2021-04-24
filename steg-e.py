@@ -349,6 +349,7 @@ class PackEncrypt(StegPack):
                 print(Fore.RED+"Terminating program!!!")
                 exit()
         self.calculations(tulsi)
+        print(Fore.GREEN+"\nNetwork File Successfully created at '{}'".format(self.tgt))
 
     def calculations(self, tulsi):
         try:
@@ -380,7 +381,7 @@ class PackEncrypt(StegPack):
         time2 = time.time()-time2
         flag = True
         time.sleep(0.5)
-        print("\n"+Fore.YELLOW+"Time taken: {} s".format(time1+time2))
+        print("\n"+Fore.YELLOW+"\nTime taken: {} s".format(time1+time2))
 
                
 
@@ -437,8 +438,20 @@ class PackDecrypt(StegPack):
         decr_msg = easyMethod_Decrypt(encr_msg, tulsi)
         time1 = time.time()-time1
         print("\n"+Fore.GREEN+"Time Taken: {} s".format(time1))
+        print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
+        ch = input()
+        ch = ch.lower()
+        if(ch=='y'):
+            output_file = input("Enter the output location: ")
+            try:
+                with open(output_file, "w") as ginger:
+                    ginger.write(decr_msg)
+            except:
+                print(Fore.RED+"Cannot save output to file.")
+        elif(not(ch=='n')):
+            print("Not a valid choice, message will only be displayed on terminal.")
         print("\nYour message here:\n")
-        print(decr_msg)
+        print(Fore.CYAN+decr_msg)
 
     def calculations(self, tulsi):        
         try:
