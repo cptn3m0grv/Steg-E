@@ -38,13 +38,14 @@ from introScreen import banner
 from NetEncrypt import Net_Encrypt
 from NetDecrypt import Net_Decrypt
 from about import about_page
+from manual import manual_page
 import colorama
 from colorama import Fore, Style
 colorama.init(autoreset=True)
 
 parser = argparse.ArgumentParser(description="description")
 
-parser.add_argument('choice', help='''encrpyt\ndecrypt\nabout\npacketEncrypt\npacketDecrypt''')
+parser.add_argument('choice', help = 'encrpyt\ndecrypt\npacketEncrypt\npacketDecrypt\nabout\nmanual')
 parser.add_argument('-c','--carrier', help='Enter the location of source file (.jpg, .jpeg, .png, .pdf)')
 parser.add_argument('-d','--data', help='Enter the location of message to hide.')
 parser.add_argument('-r','--result', help='Enter the path to save output file.')
@@ -495,6 +496,8 @@ class PackDecrypt(StegPack):
 if __name__ == '__main__':
     if(args.choice=='about'):
         about_page()
+    elif(args.choice=='manual'):
+        manual_page()
     elif(args.choice=='encrypt'):
         obj = Encryption()
     elif(args.choice=='decrypt'):
