@@ -231,9 +231,15 @@ class Decryption(StegE):
 
     def decrypt_here(self):
         message_to_display = self.calculations()
-        print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
-        ch = input()
-        ch = ch.lower()
+        try:
+            print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
+            ch = input()
+            ch = ch.lower()
+        except:
+            print("^C")
+            print(Fore.RED+"Terminating program!!!")
+            exit()
+
         if(ch=='y'):
             output_file = input("Enter the output location: ")
             try:
@@ -454,9 +460,14 @@ class PackDecrypt(StegPack):
         decr_msg = easyMethod_Decrypt(encr_msg, tulsi)
         time1 = time.time()-time1
         print("\n"+Fore.GREEN+"Time Taken: {} s".format(time1))
-        print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
-        ch = input()
-        ch = ch.lower()
+        try:
+            print("Do you also want to save the decrypted message to a separate file (y/n): ", end=" ")
+            ch = input()
+            ch = ch.lower()
+        except:
+            print("^C")
+            print(Fore.RED+"Terminating program!!!")
+            exit()
         if(ch=='y'):
             output_file = input("Enter the output location: ")
             try:
