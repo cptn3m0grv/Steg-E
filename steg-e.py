@@ -113,9 +113,17 @@ class Encryption(StegE):
                 with open(self.src, 'rb') as file:
                     pass
             except:
-                print(Fore.RED+"Carrier File is Invalid!!!\n")
+                print(Fore.RED+"Carrier File Does Not Exist.\n")
                 exit()
 
+            with open(self.src, 'rb') as file:
+                if(len(re.findall(r"\$3%`\/[123]@.*\$3%`\/".encode('utf-8'), file.read())) != 0):
+                    print(Fore.RED+"\nIt seems like the carrier file is already encrypted.")
+                    print(Fore.RED+"Encrypting a file more than once is not supported as of now.\n")
+                    exit()
+                else:
+                    pass
+            
             try:
                 with open(self.msg, 'rb') as file:
                     pass
@@ -284,7 +292,7 @@ class Decryption(StegE):
 
         if(level_of_encryption == 1):
             time2 = time.time()
-            msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            msg_to_decrypt = encrypted_source_msg_temp[-1].decode('utf-8')[7:-5]
             time2 = time.time()-time2
             tulsi = self.keyInput()
             time3 = time.time()
@@ -295,7 +303,7 @@ class Decryption(StegE):
 
         elif(level_of_encryption == 2):
             time2 = time.time()
-            msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            msg_to_decrypt = encrypted_source_msg_temp[-1].decode('utf-8')[7:-5]
             time2 = time.time()-time2
             tulsi = self.keyInput()
             time3 = time.time()
@@ -309,7 +317,7 @@ class Decryption(StegE):
 
         elif(level_of_encryption == 3):
             time2 = time.time()
-            msg_to_decrypt = encrypted_source_msg_temp[0].decode('utf-8')[7:-5]
+            msg_to_decrypt = encrypted_source_msg_temp[-1].decode('utf-8')[7:-5]
             time2 = time.time()-time2
             tulsi = self.keyInput()
             time3 = time.time()
