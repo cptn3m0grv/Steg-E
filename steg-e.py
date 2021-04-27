@@ -107,7 +107,6 @@ class Encryption(StegE):
         self.level_of_encryption = 1
         super().__init__()
         if(self.src != None and self.msg != None):
-            self.first_page()
             
             try:
                 with open(self.src, 'rb') as file:
@@ -131,6 +130,7 @@ class Encryption(StegE):
                 print(Fore.RED+"Message file in invalid!!!\n")
                 exit()
                 
+            self.first_page()
             self.encrypt_here()
         else:
             print(Style.BRIGHT+Fore.RED+"Wrong Arguments!!!")
